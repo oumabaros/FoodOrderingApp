@@ -7,7 +7,7 @@ on:
       - ".github/workflows/patient-service.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: oumabaros/patient-service
+  IMAGE_NAME: patient-service
   VERSION: latest
 
 jobs:

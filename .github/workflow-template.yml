@@ -7,7 +7,7 @@ on:
       - ".github/workflows/{{ROUTE}}.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: oumabaros/{{ROUTE}}
+  IMAGE_NAME: {{ROUTE}}
   VERSION: latest
 
 jobs:

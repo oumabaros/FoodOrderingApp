@@ -7,7 +7,7 @@ on:
       - ".github/workflows/config-service.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: oumabaros/config-service
+  IMAGE_NAME: config-service
   VERSION: latest
 
 jobs:

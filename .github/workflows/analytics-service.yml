@@ -7,7 +7,7 @@ on:
       - ".github/workflows/analytics-service.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: oumabaros/analytics-service
+  IMAGE_NAME: analytics-service
   VERSION: latest
 
 jobs:

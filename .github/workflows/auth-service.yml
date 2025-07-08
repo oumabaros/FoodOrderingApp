@@ -3,7 +3,7 @@ name: "auth-service"
 on:
   push:
     paths:
-      - "microservices/auth-service/**"
+      - "backend/java/microservices/auth-service/**"
       - ".github/workflows/auth-service.yml"
 env:
   REGISTRY: ghcr.io

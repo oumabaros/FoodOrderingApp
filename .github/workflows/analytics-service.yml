@@ -3,7 +3,7 @@ name: "analytics-service"
 on:
   push:
     paths:
-      - "microservices/analytics-service/**"
+      - "backend/java/microservices/analytics-service/**"
       - ".github/workflows/analytics-service.yml"
 env:
   REGISTRY: ghcr.io

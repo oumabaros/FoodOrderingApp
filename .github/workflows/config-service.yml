@@ -3,7 +3,7 @@ name: "config-service"
 on:
   push:
     paths:
-      - "microservices/config-service/**"
+      - "backend/java/microservices/config-service/**"
       - ".github/workflows/config-service.yml"
 env:
   REGISTRY: ghcr.io

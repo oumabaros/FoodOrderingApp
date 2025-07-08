@@ -3,7 +3,7 @@ name: "patient-service"
 on:
   push:
     paths:
-      - "microservices/patient-service/**"
+      - "backend/java/microservices/patient-service/**"
       - ".github/workflows/patient-service.yml"
 env:
   REGISTRY: ghcr.io

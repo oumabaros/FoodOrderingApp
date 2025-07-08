@@ -3,7 +3,7 @@ name: "{{ROUTE}}"
 on:
   push:
     paths:
-      - "microservices/{{ROUTE}}/**"
+      - "backend/java/microservices/{{ROUTE}}/**"
       - ".github/workflows/{{ROUTE}}.yml"
 env:
   REGISTRY: ghcr.io

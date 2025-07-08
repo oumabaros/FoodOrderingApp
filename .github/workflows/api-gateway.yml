@@ -3,7 +3,7 @@ name: "api-gateway"
 on:
   push:
     paths:
-      - "microservices/api-gateway/**"
+      - "backend/java/microservices/api-gateway/**"
       - ".github/workflows/api-gateway.yml"
 env:
   REGISTRY: ghcr.io

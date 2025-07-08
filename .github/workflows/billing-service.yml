@@ -3,7 +3,7 @@ name: "billing-service"
 on:
   push:
     paths:
-      - "microservices/billing-service/**"
+      - "backend/java/microservices/billing-service/**"
       - ".github/workflows/billing-service.yml"
 env:
   REGISTRY: ghcr.io

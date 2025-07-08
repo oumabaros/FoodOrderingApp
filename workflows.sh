@@ -3,7 +3,7 @@ WORKFLOW_TEMPLATE=$(cat .github/workflow-template.yml)
 
 # iterate each route in current directory
 # shellcheck disable=SC2045
-for ROUTE in $(ls microservices); do
+for ROUTE in $(ls backend/java/microservices); do
     echo "generating workflow for microservices/${ROUTE}"
 
     # replace template route placeholder with route name

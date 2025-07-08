@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-service
+  labels:
+    app: billing-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-service
+  template:
+    metadata:
+      labels:
+        app: billing-service
+    spec:
+      containers:
+        - name: billing-service
+          image: localhost:5001/billing-service:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 4001
+          env:
+            - name: BPL_JVM_THREAD_COUNT
+              value: "50"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing-service
+  labels:
+    app: billing-service
+spec:
+  type: ClusterIP
+  selector:
+    app: billing-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4001
+
+---

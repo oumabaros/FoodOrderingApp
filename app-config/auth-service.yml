@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    password: password
+    url: jdbc:postgresql://auth-service-db:5432/db
+    username: admin_user
+  jpa:
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+server:
+  port: 4005
+jwt:
+  secret: 480a088f3f15819b594e55ce9cec34069603a710d0a23094ebc226173845157231432e72cae66389cbced998e8e5705622bb28ecf070b3a582b20a1619ffa86543a861f3dc247b71598be79f768a31d1fb853a34b63f0328cea0dd5657f6da387c331a7e7433045de785850c63ac0167b491b8c3e0a4134d18c95a6de46fb83da1efaf70c90d3ebbc93a7cad6d9df012299e3a7d10760205688718d091723977904941170711d485ecb119b9e54e9e89a9df2600c58627df7b5a08ae16707292030e0c6abb75f930457c6d65ceb3e974f9845c2af4f9b82353e43c815978383acba08fbf3f1760aa9d6773ed09a4ee6d465286f74e5f163bb4a9cb588bdf4292
+

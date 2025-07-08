@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: patient-service-config
+  labels:
+    db: patient-service-db
+data:
+  init.sql: |
+    CREATE DATABASE db;
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patient-service-db
+  labels:
+    db: patient-service-db
+spec:
+  selector:
+    matchLabels:
+      db: patient-service-db
+  template:
+    metadata:
+      labels:
+        db: patient-service-db
+    spec:
+      containers:
+        - name: patient-service-db
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: admin_user
+            - name: POSTGRES_PASSWORD
+              value: password
+          resources:
+            requests:
+              cpu: 100m
+              memory: 60Mi
+            limits:
+              cpu: 200m
+              memory: 120Mi
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: patient-service-config-volume
+      volumes:
+        - name: patient-service-config-volume
+          configMap:
+            name: patient-service-config
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: patient-service-db
+  labels:
+    db: patient-service-db
+spec:
+  type: ClusterIP
+  selector:
+    db: patient-service-db
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 5432

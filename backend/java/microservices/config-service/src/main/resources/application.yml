@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: config-service
+  profiles:
+    active: development
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/oumabaros/pms-config
+          skipSslValidation: true
+          basedir: /var/tmp/spring-cloud/repos/
+          strictHostKeyChecking: false
+          default-label: master
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+  security:
+    user:
+      name: user
+      password: password
+server:
+  port: 8888
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    threads:
+      max: 50
+      min-spare: 5

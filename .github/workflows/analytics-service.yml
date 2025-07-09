@@ -7,7 +7,7 @@ on:
       - ".github/workflows/analytics-service.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: oumabaros/analytics-service
+  IMAGE_NAME: ${{ github.repository_owner }}/analytics-service
   VERSION: latest
 
 jobs:
@@ -89,7 +89,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish container image
         run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}

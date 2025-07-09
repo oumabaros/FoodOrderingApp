@@ -50,14 +50,14 @@ public class LocalStack extends Stack {
     DatabaseInstance authServiceDb =
         createDatabase("AuthServiceDB", "auth-service-db");
 
-    DatabaseInstance patientServiceDb =
-        createDatabase("PatientServiceDB", "patient-service-db");
+    DatabaseInstance restaurantDb =
+        createDatabase("RestaurantServiceDB", "restaurant-service-db");
 
     CfnHealthCheck authDbHealthCheck =
         createDbHealthCheck(authServiceDb, "AuthServiceDBHealthCheck");
 
-    CfnHealthCheck patientDbHealthCheck =
-        createDbHealthCheck(patientServiceDb, "PatientServiceDBHealthCheck");
+    CfnHealthCheck restaurantDbHealthCheck =
+        createDbHealthCheck(restaurantDb, "RestaurantServiceDBHealthCheck");
 
     CfnCluster mskCluster = createMskCluster();
 
@@ -89,26 +89,26 @@ public class LocalStack extends Stack {
 
     analyticsService.getNode().addDependency(mskCluster);
 
-    FargateService patientService = createFargateService("PatientService",
-        "patient-service",
+    FargateService restaurant = createFargateService("RestaurantService",
+        "restaurant-service",
         List.of(4000),
-        patientServiceDb,
+        restaurantDb,
         Map.of(
             "BILLING_SERVICE_ADDRESS", "host.docker.internal",
             "BILLING_SERVICE_GRPC_PORT", "9001"
         ));
-    patientService.getNode().addDependency(patientServiceDb);
-    patientService.getNode().addDependency(patientDbHealthCheck);
-    patientService.getNode().addDependency(billingService);
-    patientService.getNode().addDependency(mskCluster);
+    restaurant.getNode().addDependency(restaurantDb);
+    restaurant.getNode().addDependency(restaurantDbHealthCheck);
+    restaurant.getNode().addDependency(billingService);
+    restaurant.getNode().addDependency(mskCluster);
 
     createApiGatewayService();
   }
 
   private Vpc createVpc(){
     return Vpc.Builder
-        .create(this, "PatientManagementVPC")
-        .vpcName("PatientManagementVPC")
+        .create(this, "RestaurantManagementVPC")
+        .vpcName("RestaurantManagementVPC")
         .maxAzs(2)
         .build();
   }
@@ -157,10 +157,10 @@ public class LocalStack extends Stack {
   }
 
   private Cluster createEcsCluster(){
-    return Cluster.Builder.create(this, "PatientManagementCluster")
+    return Cluster.Builder.create(this, "RestaurantManagementCluster")
         .vpc(vpc)
         .defaultCloudMapNamespace(CloudMapNamespaceOptions.builder()
-            .name("patient-management.local")
+            .name("restaurant-management.local")
             .build())
         .build();
   }

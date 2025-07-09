@@ -1,5 +1,5 @@
-### GET request to get all patients
-###GET http://lb-7e648e08.elb.localhost.localstack.cloud:4004/api/patients
-GET http://localhost:4004/api/patients
+### GET request to get all restaurants
+###GET http://lb-7e648e08.elb.localhost.localstack.cloud:4004/api/restaurants
+GET http://localhost:4004/api/restaurants
 Authorization: Bearer {{token}}
 ###

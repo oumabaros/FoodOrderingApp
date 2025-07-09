@@ -1,0 +1,95 @@
+name: "restaurant-service"
+
+on:
+  push:
+    paths:
+      - "backend/java/microservices/restaurant-service/**"
+      - ".github/workflows/restaurant-service.yml"
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/restaurant-service
+  VERSION: latest
+
+jobs:
+  build:
+    name: Build and Test restaurant-service
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      checks: write
+      security-events: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+      - name: Code vulnerability scanning
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          path: "${{ github.workspace }}"
+          fail-build: false
+          severity-cutoff: high
+          acs-report-enable: true
+      - name: Upload vulnerability report
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: Build, unit tests and integration tests
+        run: |-
+          cd backend/java/microservices/restaurant-service
+          chmod +x mvnw
+          ./mvnw install
+  package:
+    name: Package and Publish restaurant-service
+    if: ${{ github.ref == 'refs/heads/master' }}
+    needs: [ build ]
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+      - name: Build container image
+        run: |
+          cd backend/java/microservices/restaurant-service
+          chmod +x mvnw
+          ./mvnw spring-boot:build-image \
+          -Dmodule.image.name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
+          -DskipTests
+
+      - name: OCI image vulnerability scanning
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          fail-build: false
+          severity-cutoff: high
+#      - name: Upload vulnerability report
+#        uses: github/codeql-action/upload-sarif@v3
+#        if: success() || failure()
+#        with:
+##          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: Log into container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Publish container image
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define an array of application directories
-declare -a app_dirs=("backend/java/microservices/analytics-service" "backend/java/microservices/api-gateway" "backend/java/microservices/auth-service" "backend/java/microservices/billing-service" "backend/java/microservices/config-service" "backend/java/microservices/patient-service")
+declare -a app_dirs=("backend/java/microservices/analytics-service" "backend/java/microservices/api-gateway" "backend/java/microservices/auth-service" "backend/java/microservices/billing-service" "backend/java/microservices/config-service" "backend/java/microservices/restaurant-service")
 
 for app_dir in "${app_dirs[@]}"; do
     echo "Building application in: $app_dir"

@@ -6,14 +6,14 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class PatientIntegrationTest {
+public class RestaurantIntegrationTest {
   @BeforeAll
   static void setUp(){
     RestAssured.baseURI = "http://localhost:4004";
   }
 
   @Test
-  public void shouldReturnPatientsWithValidToken () {
+  public void shouldReturnRestaurantsWithValidToken () {
     String loginPayload = """
           {
             "email": "testuser@test.com",
@@ -35,9 +35,9 @@ public class PatientIntegrationTest {
     given()
         .header("Authorization", "Bearer " + token)
         .when()
-        .get("/api/patients")
+        .get("/api/restaurants")
         .then()
         .statusCode(200)
-        .body("patients", notNullValue());
+        .body("restaurants", notNullValue());
   }
 }

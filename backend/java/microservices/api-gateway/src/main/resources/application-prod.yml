@@ -16,22 +16,22 @@ spring:
           filters:
             - StripPrefix=1
 
-        # Route for /api/patients/** to patient-service
-        - id: patient-service-route
+        # Route for /api/restaurants/** to restaurant-service
+        - id: restaurant-service-route
           uri: http://host.docker.internal:4000
           predicates:
-            - Path=/api/patients/**
+            - Path=/api/restaurants/**
           filters:
             - StripPrefix=1
             - JwtValidation
 
-        # Route for /api/docs/patients to patient-service /v3/api-docs
-        - id: api-docs-patient-route
+        # Route for /api/docs/restaurants to restaurant-service /v3/api-docs
+        - id: api-docs-restaurant-route
           uri: http://host.docker.internal:4000
           predicates:
-            - Path=/api-docs/patients
+            - Path=/api-docs/restaurants
           filters:
-            - RewritePath=/api-docs/patients,/v3/api-docs
+            - RewritePath=/api-docs/restaurants,/v3/api-docs
 
         - id: api-docs-auth-route
           uri: http:/host.docker.internal:4005

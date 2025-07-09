@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restaurant-service-config
+  labels:
+    db: restaurant-service-db
+data:
+  init.sql: |
+    CREATE DATABASE db;
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-service-db
+  labels:
+    db: restaurant-service-db
+spec:
+  selector:
+    matchLabels:
+      db: restaurant-service-db
+  template:
+    metadata:
+      labels:
+        db: restaurant-service-db
+    spec:
+      containers:
+        - name: restaurant-service-db
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: admin_user
+            - name: POSTGRES_PASSWORD
+              value: password
+          resources:
+            requests:
+              cpu: 100m
+              memory: 60Mi
+            limits:
+              cpu: 200m
+              memory: 120Mi
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: restaurant-service-config-volume
+      volumes:
+        - name: restaurant-service-config-volume
+          configMap:
+            name: restaurant-service-config
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-service-db
+  labels:
+    db: restaurant-service-db
+spec:
+  type: ClusterIP
+  selector:
+    db: restaurant-service-db
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 5432

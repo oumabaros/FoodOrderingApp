@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import patient.events.PatientEvent;
+import restaurant.events.RestaurantEvent;
 
 import java.util.stream.StreamSupport;
 
@@ -24,17 +24,17 @@ public class KafkaConsumer {
                 .findFirst().map(header -> new String(header.value())).orElse("N/A");
     }
 
-    @KafkaListener(topics = "patient", groupId = "analytics-service", containerFactory =
+    @KafkaListener(topics = "restaurant", groupId = "analytics-service", containerFactory =
             "kafkaListenerByteArrayContainerFactory")
     public void consumeEvent(ConsumerRecord<String, byte[]> cr, @Payload byte[] event) {
         try {
-            PatientEvent patientEvent = PatientEvent.parseFrom(event);
+            RestaurantEvent restaurantEvent = RestaurantEvent.parseFrom(event);
             // ... perform any business related to analytics here
 
-            log.info("Received Patient Event: [PatientId={},PatientName={},PatientEmail={}]",
-                    patientEvent.getPatientId(),
-                    patientEvent.getName(),
-                    patientEvent.getEmail(), cr.key(), typeIdHeader(cr.headers()), event);
+            log.info("Received Restaurant Event: [RestaurantId={},RestaurantName={},RestaurantEmail={}]",
+                    restaurantEvent.getRestaurantId(),
+                    restaurantEvent.getName(),
+                    restaurantEvent.getEmail(), cr.key(), typeIdHeader(cr.headers()), event);
         } catch (InvalidProtocolBufferException e) {
             log.error("Error deserializing event {}", e.getMessage());
         }

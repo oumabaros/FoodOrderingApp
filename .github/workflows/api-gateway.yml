@@ -7,7 +7,7 @@ on:
       - ".github/workflows/api-gateway.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: api-gateway
+  IMAGE_NAME: oumabaros/api-gateway
   VERSION: latest
 
 jobs:

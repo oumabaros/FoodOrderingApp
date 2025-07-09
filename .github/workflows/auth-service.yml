@@ -7,7 +7,7 @@ on:
       - ".github/workflows/auth-service.yml"
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: auth-service
+  IMAGE_NAME: oumabaros/auth-service
   VERSION: latest
 
 jobs:

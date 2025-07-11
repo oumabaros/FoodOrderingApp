@@ -1,5 +1,6 @@
 package com.pm.authservice.util;
 
+import com.pm.authservice.config.JwtProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -9,17 +10,17 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import javax.crypto.SecretKey;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
 
   private final Key secretKey;
-
-  public JwtUtil(@Value("${jwt.secret}") String secret) {
+  public final JwtProperties jwtProperties;
+  public JwtUtil(JwtProperties jwtProperties) {
+    this.jwtProperties=jwtProperties;
     byte[] keyBytes = Base64.getDecoder()
-        .decode(secret.getBytes(StandardCharsets.UTF_8));
+        .decode(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     this.secretKey = Keys.hmacShaKeyFor(keyBytes);
   }
 

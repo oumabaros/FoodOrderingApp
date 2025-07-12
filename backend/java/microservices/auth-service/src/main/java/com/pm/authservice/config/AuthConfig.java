@@ -14,7 +14,7 @@ import java.io.IOException;
 public class AuthConfig {
     @Value("${auth0.issuer}")
     private String issuer;
-    @Value("${oauth0.client-id}")
+    @Value("${auth0.client-id}")
     private String clientId;
 
     @Bean

@@ -1,22 +1,10 @@
+issuer: https://oumabaros.us.auth0.com/
+client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
+client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
+audience: mern-food-ordering-app-api
 server:
   port: 4005
 spring:
-  application:
-    name: auth-service
-  profiles:
-    active: development
-  config:
-    import: "optional:configserver:"
-  datasource:
-    password: password
-    url: jdbc:postgresql://auth-service-db:5432/db
-    username: admin_user
-  jpa:
-      hibernate:
-        ddl-auto: update
-  sql:
-      init:
-        mode: always
   cloud:
     config:
       uri: http://config-service:8888
@@ -31,6 +19,38 @@ spring:
       username: user
       password: password
       label: master
+  application:
+    name: auth-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${issuer}
+          audiences: ${audience}
+      client:
+        provider:
+          auth0:
+            issuer-uri: ${issuer}
+        registration:
+          auth0:
+            provider: auth0
+            authorization-grant-type: client_credentials
+            client-id: ${client-id}
+            client-secret: ${client-secret}
+  profiles:
+    active: development
+  config:
+    import: "optional:configserver:"
+  datasource:
+    password: password
+    url: jdbc:postgresql://auth-service-db:5432/db
+    username: admin_user
+  jpa:
+      hibernate:
+        ddl-auto: update
+  sql:
+      init:
+        mode: always
 management:
   endpoints:
     web:

@@ -1,7 +1,8 @@
-issuer: https://oumabaros.us.auth0.com/
-client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
-client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
-audience: mern-food-ordering-app-api
+auth0:
+  audience: mern-food-ordering-app-api
+  issuer: https://oumabaros.us.auth0.com/
+  client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
+  client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
 server:
   port: 4005
 spring:
@@ -21,22 +22,6 @@ spring:
       label: master
   application:
     name: auth-service
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${issuer}
-          audiences: ${audience}
-      client:
-        provider:
-          auth0:
-            issuer-uri: ${issuer}
-        registration:
-          auth0:
-            provider: auth0
-            authorization-grant-type: client_credentials
-            client-id: ${client-id}
-            client-secret: ${client-secret}
   profiles:
     active: development
   config:

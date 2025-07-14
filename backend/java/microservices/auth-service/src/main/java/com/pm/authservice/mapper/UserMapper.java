@@ -5,8 +5,6 @@ import com.pm.authservice.dto.UserRequestDTO;
 import com.pm.authservice.dto.UserResponseDTO;
 import com.pm.authservice.model.User;
 
-import java.time.LocalDate;
-
 public class UserMapper {
   public static UserResponseDTO toDTO(User user) {
     UserResponseDTO userDTO = new UserResponseDTO();

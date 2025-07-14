@@ -6,14 +6,18 @@ import com.pm.authservice.dto.validators.CreateUserValidationGroup;
 import com.pm.authservice.model.User;
 import com.pm.authservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/my/user")
+@Tag(name = "User", description = "API for managing Users")
 public class MyUserController {
 
     private final UserService user;

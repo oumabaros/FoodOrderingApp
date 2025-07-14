@@ -67,6 +67,8 @@ services:
       - "4004:4004"
     environment:
       - AUTH_SERVICE_URL=http://auth-service:4005
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - internal
 
@@ -131,7 +133,8 @@ services:
       - SPRING_SQL_INIT_MODE=always
     networks:
       - internal
-
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 networks:
   internal:

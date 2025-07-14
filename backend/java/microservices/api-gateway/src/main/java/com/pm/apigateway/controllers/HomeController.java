@@ -10,7 +10,7 @@ public class HomeController {
         this.apiGatewayProperties= apiGatewayProperties;
     }
 
-    @GetMapping("/")
+    @GetMapping("/greeting")
     public String getGreeting() {
         return apiGatewayProperties.getGreeting();
     }

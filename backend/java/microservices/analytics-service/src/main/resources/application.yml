@@ -3,7 +3,7 @@ spring:
   application:
     name: analytics-service
   profiles:
-    active: development
+    active: dev
   config:
     import: "optional:configserver:"
   cloud:

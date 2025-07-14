@@ -2,7 +2,7 @@ spring:
   application:
     name: restaurant-service
   profiles:
-    active: development
+    active: dev
   config:
     import: "optional:configserver:"
   cloud:
@@ -22,6 +22,7 @@ spring:
   kafka:
     producer:
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
     bootstrap-servers: localhost:9092,localhost:9094
 server:
   port: 4000

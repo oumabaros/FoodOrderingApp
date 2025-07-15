@@ -20,7 +20,7 @@ public class KafkaProducer {
   public void sendEvent(User user) {
     UserEvent event = UserEvent.newBuilder()
         .setUserId(user.getId().toString())
-        .setName(user.getName())
+        .setAuth0Id(user.getAuth0Id())
         .setEmail(user.getEmail())
         .setEventType("USER_CREATED")
         .build();

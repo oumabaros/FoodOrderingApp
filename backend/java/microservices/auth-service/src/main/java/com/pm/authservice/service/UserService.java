@@ -7,7 +7,6 @@ import com.pm.authservice.kafka.KafkaProducer;
 import com.pm.authservice.mapper.UserMapper;
 import com.pm.authservice.model.User;
 import com.pm.authservice.repository.UserRepository;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +20,8 @@ public class UserService {
     this.kafkaProducer = kafkaProducer;
   }
   
- public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+
+  public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
     if (userRepository.existsByAuth0Id(userRequestDTO.getAuth0Id())) {
       throw new Auth0IdAlreadyExistsException(
               "A user with this Auth0Id " + "already exists"

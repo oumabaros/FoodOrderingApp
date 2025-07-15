@@ -16,7 +16,7 @@ spring:
         - id: restaurant-service-route
           uri: http://host.docker.internal:4000
           predicates:
-            - Path=/api/restaurants/**
+            - Path=/api/my/restaurants/**
           filters:
             - StripPrefix=1
             - JwtValidation

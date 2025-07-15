@@ -23,7 +23,7 @@ spring:
     producer:
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    bootstrap-servers: localhost:9092,localhost:9094
+    bootstrap-servers: http://kafka:9092,http://kafka:9094
 server:
   port: 4000
 management:

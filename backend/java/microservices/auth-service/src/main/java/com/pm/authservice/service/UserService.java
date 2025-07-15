@@ -7,6 +7,7 @@ import com.pm.authservice.kafka.KafkaProducer;
 import com.pm.authservice.mapper.UserMapper;
 import com.pm.authservice.model.User;
 import com.pm.authservice.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,9 +24,10 @@ public class UserService {
 
   public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
     if (userRepository.existsByAuth0Id(userRequestDTO.getAuth0Id())) {
-      throw new Auth0IdAlreadyExistsException(
-              "A user with this Auth0Id " + "already exists"
-                      + userRequestDTO.getAuth0Id());
+//      throw new Auth0IdAlreadyExistsException(
+//              "A user with this Auth0Id " + "already exists"
+//                      + userRequestDTO.getAuth0Id());
+      return new UserResponseDTO();
     }
 
     User newUser = userRepository.save(

@@ -1,3 +1,4 @@
+import { useCreateMyUser } from "@/api/MyUserApi";
 import { Auth0Provider, User, type AppState } from "@auth0/auth0-react";
 
 type Props = {
@@ -5,22 +6,31 @@ type Props = {
 };
 
 const Auth0ProviderWithNavigate = ({ children }: Props) => {
+  const { createUser } = useCreateMyUser();
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
+  const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
   if (!domain || !clientId || !redirectUri) {
     throw new Error("Auth0 environment variables are not set");
   }
 
   const onRedirectCallback = (appState?: AppState, user?: User) => {
-    console.log("Redirect Callback", appState, user);
+    if (user?.sub && user?.email) {
+      createUser({
+        auth0Id: user.sub,
+        email: user.email,
+      }).catch((error) => {
+        console.error("Error creating user:", error);
+      });
+    }
   };
   return (
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      authorizationParams={{ redirect_uri: redirectUri }}
+      authorizationParams={{ redirect_uri: redirectUri, audience }}
       onRedirectCallback={onRedirectCallback}
     >
       {children}

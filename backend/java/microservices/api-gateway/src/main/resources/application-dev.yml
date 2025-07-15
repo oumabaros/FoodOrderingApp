@@ -4,6 +4,22 @@ server:
 spring:
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173" # Replace with your actual frontend origin(s)
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*" # Or specify specific headers like Content-Type, Authorization
+            allowCredentials: true
+            maxAge: 3600 # Cache preflight request for 1 hour
+        add-to-simple-url-handler-mapping: true # Important for handling OPTIONS preflight requests
       routes:
         - id: auth-service-route
           uri: http://host.docker.internal:4005

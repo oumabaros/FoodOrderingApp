@@ -1,14 +1,41 @@
 server:
-  port: 4004 # Gateway listens on port 4004
-
+  port: 4004
+auth0:
+  front-end: http://localhost:5173
+  auth-server: http://host.docker.internal:4005/oauth2/authorization/auth0
+  audience: mern-food-ordering-app-api
+  domain: oumabaros.us.auth0.com
+  client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
+  client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
 spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          audiences:
+            - ${auth0.audience}
+          issuer-uri: https://${auth0.domain}/
+      client:
+        registration:
+          auth0:
+            client-id: ${auth0.client-id}
+            client-secret: ${auth0.client-secret}
+            scope: openid+profile+email
+            redirect-uri: ${auth0.front-end}
+        provider:
+          auth0:
+            issuer-uri: https://${auth0.domain}/
   cloud:
     gateway:
       globalcors:
+        add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:5173" # Replace with your actual frontend origin(s)
+              - ${auth0.front-end}
             allowedMethods:
               - GET
               - POST
@@ -16,10 +43,8 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders:
-              - "*" # Or specify specific headers like Content-Type, Authorization
+              - "*"
             allowCredentials: true
-            maxAge: 3600 # Cache preflight request for 1 hour
-        add-to-simple-url-handler-mapping: true # Important for handling OPTIONS preflight requests
       routes:
         - id: auth-service-route
           uri: http://host.docker.internal:4005
@@ -35,7 +60,6 @@ spring:
             - Path=/api/my/restaurants/**
           filters:
             - StripPrefix=1
-            - JwtValidation
 
         # Route for /api/docs/restaurants to restaurant-service /v3/api-docs
         - id: api-docs-restaurant-route
@@ -51,3 +75,4 @@ spring:
             - Path=/api-docs/auth
           filters:
             - RewritePath=/api-docs/auth,/v3/api-docs
+

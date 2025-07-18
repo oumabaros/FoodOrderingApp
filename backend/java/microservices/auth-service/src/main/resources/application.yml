@@ -1,9 +1,10 @@
-auth0:
-  audience: mern-food-ordering-app-api
-  domain: oumabaros.us.auth0.com
-  front-end: http://localhost:5173
-  client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
-  client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
+#auth0:
+#  audience: mern-food-ordering-app-api
+#  domain: oumabaros.us.auth0.com
+#  front-end: http://localhost:5173
+#  api-gateway: http://localhost:4004
+#  client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
+#  client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
 server:
   port: 4005
 spring:
@@ -12,23 +13,23 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
     bootstrap-servers: http://kafka:9092,http://kafka:9094
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          audiences:
-            - ${auth0.audience}
-          issuer-uri: https://${auth0.domain}/
-      client:
-        registration:
-          auth0:
-            client-id: ${auth0.client-id}
-            client-secret: ${auth0.client-secret}
-            scope: openid+profile+email
-            redirect-uri: ${auth0.front-end}
-        provider:
-          auth0:
-            issuer-uri: https://${auth0.domain}/
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          audiences:
+#            - ${auth0.audience}
+#          issuer-uri: https://${auth0.domain}/
+#      client:
+#        registration:
+#          auth0:
+#            client-id: ${auth0.client-id}
+#            client-secret: ${auth0.client-secret}
+#            scope: openid+profile+email
+#            redirect-uri: ${auth0.front-end}
+#        provider:
+#          auth0:
+#            issuer-uri: https://${auth0.domain}/
 
   cloud:
     config:

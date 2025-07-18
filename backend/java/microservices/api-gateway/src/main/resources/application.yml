@@ -1,3 +1,5 @@
+auth0:
+  front-end: http://localhost:5173
 spring:
   application:
     name: api-gateway
@@ -21,10 +23,11 @@ spring:
       label: master
     gateway:
       globalcors:
+        add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:5173" # Replace with your actual frontend origin(s)
+              - "http://localhost:5173"
             allowedMethods:
               - GET
               - POST
@@ -35,22 +38,23 @@ spring:
               - "*" # Or specify specific headers like Content-Type, Authorization
             allowCredentials: true
             maxAge: 3600 # Cache preflight request for 1 hour
-        add-to-simple-url-handler-mapping: true
+
       routes:
         - id: auth-service-route
           uri: http://auth-service:4005
           predicates:
             - Path=/api/my/user/**
           filters:
-            - StripPrefix=1
+            - AddResponseHeader=X-CORS-Enabled, true
+            - RewritePath=/api/(?<segment>.*), /${segment}
 
         - id: restaurant-service-route
           uri: http://restaurant-service:4000
           predicates:
             - Path=/api/restaurants/**
           filters:
-            - StripPrefix=1
-            - JwtValidation
+            - AddResponseHeader=X-CORS-Enabled, true
+            - RewritePath=/api/(?<segment>.*), /${segment}
 
         - id: api-docs-restaurant-route
           uri: http://restaurant-service:4000

@@ -22,7 +22,7 @@ public class MyUserController {
     }
     @RequestMapping(value = "/my/user", method = RequestMethod.POST)
     @Operation(summary = "Create a new user.")
-    public ResponseEntity<UserResponseDTO> createRestaurant(
+    public ResponseEntity<UserResponseDTO> createUser(
             @Validated({Default.class, CreateUserValidationGroup.class})
             @RequestBody UserRequestDTO userRequestDTO) {
 

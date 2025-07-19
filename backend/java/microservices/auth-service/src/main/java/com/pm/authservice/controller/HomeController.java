@@ -23,7 +23,7 @@ public class HomeController {
         return authProperties.getGreeting();
     }
 
-    @RequestMapping(value = "/ping", method = RequestMethod.GET)
+    @RequestMapping(value = "/my/user/ping", method = RequestMethod.GET)
     public String ping() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();

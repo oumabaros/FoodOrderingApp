@@ -1,5 +1,12 @@
+server:
+  port: 4004
 auth0:
   front-end: http://localhost:5173
+  auth-server: http://host.docker.internal:4005/oauth2/authorization/auth0
+  audience: mern-food-ordering-app-api
+  domain: oumabaros.us.auth0.com
+  client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
+  client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
 spring:
   application:
     name: api-gateway
@@ -7,6 +14,26 @@ spring:
     active: dev
   config:
     import: "optional:configserver:"
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          audiences:
+#            - ${auth0.audience}
+#          issuer-uri: https://${auth0.domain}/
+#      client:
+#        registration:
+#          auth0:
+#            client-id: ${auth0.client-id}
+#            client-secret: ${auth0.client-secret}
+#            scope: openid+profile+email
+#            redirect-uri: ${auth0.front-end}
+#        provider:
+#          auth0:
+#            issuer-uri: https://${auth0.domain}/
   cloud:
     config:
       uri: http://config-service:8888
@@ -27,7 +54,7 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:5173"
+              - ${auth0.front-end}
             allowedMethods:
               - GET
               - POST
@@ -35,42 +62,38 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders:
-              - "*" # Or specify specific headers like Content-Type, Authorization
+              - "*"
             allowCredentials: true
-            maxAge: 3600 # Cache preflight request for 1 hour
-
       routes:
         - id: auth-service-route
-          uri: http://auth-service:4005
+          uri: http://host.docker.internal:4005
           predicates:
             - Path=/api/my/user/**
           filters:
             - AddResponseHeader=X-CORS-Enabled, true
             - RewritePath=/api/(?<segment>.*), /${segment}
 
+        # Route for /api/restaurants/** to restaurant-service
         - id: restaurant-service-route
-          uri: http://restaurant-service:4000
+          uri: http://host.docker.internal:4000
           predicates:
-            - Path=/api/restaurants/**
+            - Path=/api/my/restaurants/**
           filters:
             - AddResponseHeader=X-CORS-Enabled, true
             - RewritePath=/api/(?<segment>.*), /${segment}
 
+        # Route for /api/docs/restaurants to restaurant-service /v3/api-docs
         - id: api-docs-restaurant-route
-          uri: http://restaurant-service:4000
+          uri: http://host.docker.internal:4000
           predicates:
             - Path=/api-docs/restaurants
           filters:
             - RewritePath=/api-docs/restaurants,/v3/api-docs
 
         - id: api-docs-auth-route
-          uri: http://auth-service:4005
+          uri: http:/host.docker.internal:4005
           predicates:
             - Path=/api-docs/auth
           filters:
             - RewritePath=/api-docs/auth,/v3/api-docs
-server:
-  port: 4004
-auth:
-  service:
-    url: http://auth-service:4005
+

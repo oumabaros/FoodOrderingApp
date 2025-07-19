@@ -1,0 +1,76 @@
+#auth0:
+#  front-end: http://localhost:5173
+#spring:
+#  application:
+#    name: api-gateway
+#  profiles:
+#    active: dev
+#  config:
+#    import: "optional:configserver:"
+#  cloud:
+#    config:
+#      uri: http://config-service:8888
+#      request-connect-timeout: 5000
+#      request-read-timeout: 5000
+#      fail-fast: true
+#      retry:
+#        max-attempts: 6
+#        initial-interval: 1000
+#        max-interval: 2000
+#        multiplier: 1.1
+#      username: user
+#      password: password
+#      label: master
+#    gateway:
+#      globalcors:
+#        add-to-simple-url-handler-mapping: true
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins:
+#              - "http://localhost:5173"
+#            allowedMethods:
+#              - GET
+#              - POST
+#              - PUT
+#              - DELETE
+#              - OPTIONS
+#            allowedHeaders:
+#              - "*" # Or specify specific headers like Content-Type, Authorization
+#            allowCredentials: true
+#            maxAge: 3600 # Cache preflight request for 1 hour
+#
+#      routes:
+#        - id: auth-service-route
+#          uri: http://auth-service:4005
+#          predicates:
+#            - Path=/api/my/user/**
+#          filters:
+#            - AddResponseHeader=X-CORS-Enabled, true
+#            - RewritePath=/api/(?<segment>.*), /${segment}
+#
+#        - id: restaurant-service-route
+#          uri: http://restaurant-service:4000
+#          predicates:
+#            - Path=/api/restaurants/**
+#          filters:
+#            - AddResponseHeader=X-CORS-Enabled, true
+#            - RewritePath=/api/(?<segment>.*), /${segment}
+#
+#        - id: api-docs-restaurant-route
+#          uri: http://restaurant-service:4000
+#          predicates:
+#            - Path=/api-docs/restaurants
+#          filters:
+#            - RewritePath=/api-docs/restaurants,/v3/api-docs
+#
+#        - id: api-docs-auth-route
+#          uri: http://auth-service:4005
+#          predicates:
+#            - Path=/api-docs/auth
+#          filters:
+#            - RewritePath=/api-docs/auth,/v3/api-docs
+#server:
+#  port: 4004
+#auth:
+#  service:
+#    url: http://auth-service:4005

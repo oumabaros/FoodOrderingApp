@@ -4,9 +4,10 @@ auth0:
   front-end: http://localhost:5173
   auth-server: http://host.docker.internal:4005/oauth2/authorization/auth0
   audience: mern-food-ordering-app-api
-  domain: oumabaros.us.auth0.com
+  domain: https://oumabaros.us.auth0.com
   client-id: qdHdKxJmRtLyuquwypNeyXVkWhw1rvGB
   client-secret: wljPCTHS-_YxwHrN9nh46GSnG49_4tbtKR3a0ZEbM1nVcDsME82pyzQBSKf9218a
+  jwk-set-uri: https://oumabaros.us.auth0.com/.well-known/jwks.json
 spring:
   application:
     name: api-gateway
@@ -23,7 +24,8 @@ spring:
         jwt:
           audiences:
             - ${auth0.audience}
-          issuer-uri: https://${auth0.domain}/
+          issuer-uri: ${auth0.domain}/
+          jwk-set-uri: ${auth0.jwk-set-uri}
       client:
         registration:
           auth0:
@@ -33,7 +35,7 @@ spring:
             redirect-uri: ${auth0.front-end}
         provider:
           auth0:
-            issuer-uri: https://${auth0.domain}/
+            issuer-uri: ${auth0.domain}/
   cloud:
     config:
       uri: http://config-service:8888
@@ -96,4 +98,6 @@ spring:
             - Path=/api-docs/auth
           filters:
             - RewritePath=/api-docs/auth,/v3/api-docs
+      default-filters:
+        - TokenRelay=
 

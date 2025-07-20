@@ -2,6 +2,7 @@ package com.pm.authservice.service;
 
 import com.pm.authservice.dto.UserRequestDTO;
 import com.pm.authservice.dto.UserResponseDTO;
+import com.pm.authservice.exception.Auth0IdAlreadyExistsException;
 import com.pm.authservice.exception.UserNotFoundException;
 import com.pm.authservice.kafka.KafkaProducer;
 import com.pm.authservice.mapper.UserMapper;
@@ -25,16 +26,12 @@ public class UserService {
 
   public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
     if (userRepository.existsByAuth0Id(userRequestDTO.getAuth0Id())) {
-//      throw new Auth0IdAlreadyExistsException(
-//              "A user with this Auth0Id " + "already exists"
-//                      + userRequestDTO.getAuth0Id());
-      return new UserResponseDTO();
+      //throw new Auth0IdAlreadyExistsException("User already exists");
+      return null;
     }
 
-    User newUser = userRepository.save(
-            UserMapper.toModel(userRequestDTO));
-
-       kafkaProducer.sendEvent(newUser);
+    User newUser = userRepository.save(UserMapper.toModel(userRequestDTO));
+    kafkaProducer.sendEvent(newUser);
 
     return UserMapper.toDTO(newUser);
   }

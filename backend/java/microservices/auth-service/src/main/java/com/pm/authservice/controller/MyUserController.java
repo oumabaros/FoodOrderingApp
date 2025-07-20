@@ -8,25 +8,39 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/my/user")
 @Tag(name = "User", description = "API for managing Users")
 public class MyUserController {
 
-    private final UserService user;
+    private final UserService userService;
 
-    public MyUserController(UserService user) {
-        this.user = user;
+    public MyUserController(UserService userService) {
+        this.userService = userService;
     }
-    @RequestMapping(value = "/my/user", method = RequestMethod.POST)
+    @PostMapping
     @Operation(summary = "Create a new user.")
     public ResponseEntity<UserResponseDTO> createUser(
             @Validated({Default.class, CreateUserValidationGroup.class})
             @RequestBody UserRequestDTO userRequestDTO) {
 
-        UserResponseDTO userResponseDTO = user.createUser(
+        UserResponseDTO userResponseDTO = userService.createUser(
+                userRequestDTO);
+
+        return ResponseEntity.ok().body(userResponseDTO);
+    }
+
+    @PutMapping
+    @Operation(summary = "Update Current User.")
+    public ResponseEntity<UserResponseDTO> updateCurrentUser(Authentication authentication,
+            @Validated({Default.class, CreateUserValidationGroup.class})
+            @RequestBody UserRequestDTO userRequestDTO) {
+
+        UserResponseDTO userResponseDTO = userService.updateUser(authentication,
                 userRequestDTO);
 
         return ResponseEntity.ok().body(userResponseDTO);

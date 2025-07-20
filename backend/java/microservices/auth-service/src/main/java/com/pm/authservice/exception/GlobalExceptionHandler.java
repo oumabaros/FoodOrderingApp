@@ -48,13 +48,13 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(errors);
   }
 
-  @ExceptionHandler(RestaurantNotFoundException.class)
-  public ResponseEntity<Map<String, String>> handleRestaurantNotFoundException(
-      RestaurantNotFoundException ex) {
-    log.warn("Restaurant not found {}", ex.getMessage());
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<Map<String, String>> handleUserNotFoundException(
+      UserNotFoundException ex) {
+    log.warn("User not found {}", ex.getMessage());
 
     Map<String, String> errors = new HashMap<>();
-    errors.put("message", "Restaurant not found");
+    errors.put("message", "User not found");
     return ResponseEntity.badRequest().body(errors);
   }
 }

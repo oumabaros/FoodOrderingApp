@@ -15,8 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Collections;
 import java.util.Map;
 
-
-
 @RestController
 public class HomeController {
     private final AuthProperties authProperties;
@@ -57,12 +55,10 @@ public class HomeController {
         String authId;
         if(AuthUtils.getAuthId(authentication)!=null){
             authId = AuthUtils.getAuthId(authentication);
-
         }
         else{
             return null;
         }
-
         return authId;
     }
 
@@ -71,12 +67,10 @@ public class HomeController {
         String authToken;
         if(AuthUtils.getJwt(authentication)!=null){
             authToken = AuthUtils.getJwt(authentication);
-
         }
         else{
             return null;
         }
-
         return authToken;
     }
 }

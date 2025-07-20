@@ -25,16 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Restaurant", description = "API for managing Restaurants")
 public class RestaurantController {
 
-  private final RestaurantService restaurant;
+  private final RestaurantService restaurantService;
 
-  public RestaurantController(RestaurantService restaurant) {
-    this.restaurant = restaurant;
+  public RestaurantController(RestaurantService restaurantService) {
+    this.restaurantService = restaurantService;
   }
 
   @GetMapping
   @Operation(summary = "Get Restaurants")
   public ResponseEntity<List<RestaurantResponseDTO>> getRestaurants() {
-    List<RestaurantResponseDTO> restaurants = restaurant.getRestaurants();
+    List<RestaurantResponseDTO> restaurants = restaurantService.getRestaurants();
     return ResponseEntity.ok().body(restaurants);
   }
 
@@ -44,7 +44,7 @@ public class RestaurantController {
       @Validated({Default.class, CreateRestaurantValidationGroup.class})
       @RequestBody RestaurantRequestDTO restaurantRequestDTO) {
 
-    RestaurantResponseDTO restaurantResponseDTO = restaurant.createRestaurant(
+    RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
         restaurantRequestDTO);
 
     return ResponseEntity.ok().body(restaurantResponseDTO);
@@ -55,7 +55,7 @@ public class RestaurantController {
   public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable UUID id,
       @Validated({Default.class}) @RequestBody RestaurantRequestDTO restaurantRequestDTO) {
 
-    RestaurantResponseDTO restaurantResponseDTO = restaurant.updateRestaurant(id,
+    RestaurantResponseDTO restaurantResponseDTO = restaurantService.updateRestaurant(id,
         restaurantRequestDTO);
 
     return ResponseEntity.ok().body(restaurantResponseDTO);
@@ -64,7 +64,7 @@ public class RestaurantController {
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a Restaurant")
   public ResponseEntity<Void> deleteRestaurant(@PathVariable UUID id) {
-    restaurant.deleteRestaurant(id);
+    restaurantService.deleteRestaurant(id);
     return ResponseEntity.noContent().build();
   }
 }

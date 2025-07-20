@@ -1,4 +1,6 @@
 auth0:
+  domain: https://oumabaros.us.auth0.com
+  audience: mern-food-ordering-app-api
   jwk-set-uri: https://oumabaros.us.auth0.com/.well-known/jwks.json
 server:
   port: 4005
@@ -12,6 +14,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          issuer-uri: ${auth0.domain}/
+          audiences:
+            - ${auth0.audience}
           jwk-set-uri: ${auth0.jwk-set-uri}
   cloud:
     config:

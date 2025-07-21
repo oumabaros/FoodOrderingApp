@@ -1,6 +1,8 @@
 package com.pm.authservice.controller;
 
+import com.pm.authservice.dto.UserReqDTO;
 import com.pm.authservice.dto.UserRequestDTO;
+import com.pm.authservice.dto.UserResDTO;
 import com.pm.authservice.dto.UserResponseDTO;
 import com.pm.authservice.dto.validators.CreateUserValidationGroup;
 import com.pm.authservice.service.UserService;
@@ -12,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/my/user")
 @Tag(name = "User", description = "API for managing Users")
@@ -21,6 +25,16 @@ public class MyUserController {
 
     public MyUserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping
+    @Operation(summary = "Get Current User")
+    public ResponseEntity<UserResponseDTO> getUser(Authentication authentication) {
+        UserResponseDTO userResponseDTO = userService.getUser(authentication);
+        if (userResponseDTO==null){
+            return ResponseEntity.status(404).body(userResponseDTO);
+        }
+        return ResponseEntity.ok().body(userResponseDTO);
     }
     @PostMapping
     @Operation(summary = "Create a new user.")
@@ -39,15 +53,16 @@ public class MyUserController {
 
     @PutMapping
     @Operation(summary = "Update Current User.")
-    public ResponseEntity<UserResponseDTO> updateCurrentUser(Authentication authentication,
-            @Validated({Default.class, CreateUserValidationGroup.class})
-            @RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResDTO> updateCurrentUser(Authentication authentication,
+                                                        @Validated({Default.class, CreateUserValidationGroup.class})
+                                                             @RequestBody UserReqDTO userRequestDTO) {
+        System.out.println("USER REQUEST: "+userRequestDTO);
 
-        UserResponseDTO userResponseDTO = userService.updateUser(authentication,
+        UserResDTO userResDTO = userService.updateUser(authentication,
                 userRequestDTO);
-        if (userResponseDTO==null){
-            return ResponseEntity.status(404).body(userResponseDTO);
+        if (userResDTO==null){
+            return ResponseEntity.status(404).body(userResDTO);
         }
-        return ResponseEntity.ok().body(userResponseDTO);
+        return ResponseEntity.ok().body(userResDTO);
     }
 }

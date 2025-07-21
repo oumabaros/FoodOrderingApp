@@ -22,4 +22,14 @@ public class AuthUtils {
         }
         return null;
     }
+
+    public static String getUserId(Authentication authentication){
+        String authId;
+        if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+            Jwt jwt = jwtAuthenticationToken.getToken();
+            authId = jwt.getClaimAsString("sub");
+            return authId;
+        }
+        return null;
+    }
 }

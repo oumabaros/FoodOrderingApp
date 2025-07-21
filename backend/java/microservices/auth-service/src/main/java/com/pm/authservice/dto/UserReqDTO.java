@@ -4,25 +4,18 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.UUID;
-
-public class UserRequestDTO {
+public class UserReqDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
-    @NotBlank(message = "Auth0Id is required")
-    private String auth0Id;
-
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
-
-    private UUID id;
+    @NotBlank(message = "Address Line1 is required")
     private String addressLine1;
-
+    @NotBlank(message = "City is required")
     private String city;
-
+    @NotBlank(message = "Country is required")
     private String country;
-
 
     public @Size(max = 100, message = "Name cannot exceed 100 characters") String getName() {
         return name;
@@ -41,39 +34,27 @@ public class UserRequestDTO {
             @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String email) {
         this.email = email;
     }
-
-    public UUID getId(){
-        return id;
-    }
-    public @NotBlank(message = "Auth0Id is required") String getAuth0Id() {
-        return auth0Id;
-    }
-
-    public void setAuth0Id(@NotBlank(message = "Auth0Id is required") String auth0Id) {
-        this.auth0Id = auth0Id;
-    }
-
-    public String getAddressLine1() {
+    public @NotBlank(message = "Address is required") String getAddressLine1() {
         return addressLine1;
     }
 
-    public void setAddressLine1(String addressLine1) {
+    public void setAddressLine1(@NotBlank(message = "Address is required") String addressLine1) {
         this.addressLine1 = addressLine1;
     }
 
-    public String getCity() {
+    public @NotBlank(message = "City is required") String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(@NotBlank(message = "City is required") String city) {
         this.city = city;
     }
 
-    public String getCountry() {
+    public @NotBlank(message = "Country is required") String getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(@NotBlank(message = "Country is required") String country) {
         this.country = country;
     }
 }

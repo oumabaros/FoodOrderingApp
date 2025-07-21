@@ -36,9 +36,6 @@ public class User {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getAuth0Id() {
         return auth0Id;

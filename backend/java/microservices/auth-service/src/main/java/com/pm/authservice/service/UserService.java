@@ -12,6 +12,8 @@ import com.pm.authservice.utils.AuthUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -26,7 +28,6 @@ public class UserService {
 
   public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
     if (userRepository.existsByAuth0Id(userRequestDTO.getAuth0Id())) {
-      //throw new Auth0IdAlreadyExistsException("User already exists");
       return null;
     }
 
@@ -38,7 +39,6 @@ public class UserService {
 
   public UserResponseDTO updateUser(Authentication authentication,
                                                 UserRequestDTO userRequestDTO) {
-    User updatedUser;
     String auth0Id=getAuthId(authentication);
     if(auth0Id!=null){
       User user = userRepository.findByAuth0Id(auth0Id).orElseThrow(
@@ -49,23 +49,23 @@ public class UserService {
       user.setCountry(userRequestDTO.getCountry());
       user.setCity(userRequestDTO.getCity());
 
-      updatedUser = userRepository.save(user);
-    }
-    else{
-      throw new UserNotFoundException("Auth0Id is null or invalid.");
-    }
-
-    return UserMapper.toDTO(updatedUser);
-  }
-
-  public String getAuthId(Authentication authentication) {
-    String authId;
-    if(AuthUtils.getAuthId(authentication)!=null){
-      authId = AuthUtils.getAuthId(authentication);
+      User updatedUser = userRepository.save(user);
+      return UserMapper.toDTO(updatedUser);
     }
     else{
       return null;
     }
+
+  }
+
+  public String getAuthId(Authentication authentication) {
+    String authId = null;
+    if(authentication.isAuthenticated()){
+      authId = AuthUtils.getAuthId(authentication);
+    }
+
     return authId;
   }
+
+
 }

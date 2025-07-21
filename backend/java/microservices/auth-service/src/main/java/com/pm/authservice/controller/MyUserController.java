@@ -30,8 +30,11 @@ public class MyUserController {
 
         UserResponseDTO userResponseDTO = userService.createUser(
                 userRequestDTO);
+        if (userResponseDTO==null){
+            return ResponseEntity.status(200).body(userResponseDTO);
+        }
 
-        return ResponseEntity.ok().body(userResponseDTO);
+        return ResponseEntity.status(201).body(userResponseDTO);
     }
 
     @PutMapping
@@ -42,7 +45,9 @@ public class MyUserController {
 
         UserResponseDTO userResponseDTO = userService.updateUser(authentication,
                 userRequestDTO);
-
+        if (userResponseDTO==null){
+            return ResponseEntity.status(404).body(userResponseDTO);
+        }
         return ResponseEntity.ok().body(userResponseDTO);
     }
 }

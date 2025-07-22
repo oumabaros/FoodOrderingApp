@@ -89,7 +89,7 @@ export const useUpdateMyUser = () => {
       },
       body: JSON.stringify(formData),
     });
-    console.log("JSON.stringify(formData):", JSON.stringify(formData));
+
     if (!response.ok) {
       throw new Error("Failed to update user");
     }
@@ -113,5 +113,5 @@ export const useUpdateMyUser = () => {
     toast.error(error.toString());
     reset();
   }
-  return { updateUser, isLoading };
+  return { updateUser, isLoading, isSuccess, error, reset };
 };

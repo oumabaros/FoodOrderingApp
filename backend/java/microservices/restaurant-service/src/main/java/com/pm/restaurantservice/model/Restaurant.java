@@ -1,13 +1,10 @@
 package com.pm.restaurantservice.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,70 +12,113 @@ public class Restaurant {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
+  @NotNull
+  private String restaurantName;
+  @NotNull
+  private String city;
+  @NotNull
+  private String country;
+  @NotNull
+  private Double deliveryPrice;
+  @NotNull
+  private Integer estimatedDeliveryTime;
+  @NotNull
+  private String imageUrl;
+  @NotNull
+  private LocalDate lastUpdated;
+  @NotNull
+  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+  private List<MenuItem> menuItems = new ArrayList<>();
 
   @NotNull
-  private String name;
+  private String userId;
 
-  @NotNull
-  @Email
-  @Column(unique = true)
-  private String email;
+  private String cuisines ;
 
-  @NotNull
-  private String address;
+  public String getCuisines() {
+    return cuisines;
+  }
 
-  @NotNull
-  private LocalDate dateOfBirth;
+  public void setCuisines(String cuisines) {
+    this.cuisines = cuisines;
+  }
 
-  @NotNull
-  private LocalDate registeredDate;
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public List<MenuItem> getMenuItems() {
+    return menuItems;
+  }
+
+  public void setMenuItems(List<MenuItem> menuItems) {
+    this.menuItems = menuItems;
+  }
+
 
   public UUID getId() {
     return id;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
+  public String getRestaurantName() {
+    return restaurantName;
   }
 
-  public @NotNull String getName() {
-    return name;
+  public void setRestaurantName(String restaurantName) {
+    this.restaurantName = restaurantName;
   }
 
-  public void setName(@NotNull String name) {
-    this.name = name;
+  public String getCity() {
+    return city;
   }
 
-  public @NotNull @Email String getEmail() {
-    return email;
+  public void setCity(String city) {
+    this.city = city;
   }
 
-  public void setEmail(@NotNull @Email String email) {
-    this.email = email;
+  public String getCountry() {
+    return country;
   }
 
-  public @NotNull String getAddress() {
-    return address;
+  public void setCountry(String country) {
+    this.country = country;
   }
 
-  public void setAddress(@NotNull String address) {
-    this.address = address;
+  public Double getDeliveryPrice() {
+    return deliveryPrice;
   }
 
-  public @NotNull LocalDate getDateOfBirth() {
-    return dateOfBirth;
+  public void setDeliveryPrice(Double deliveryPrice) {
+    this.deliveryPrice = deliveryPrice;
   }
 
-  public void setDateOfBirth(@NotNull LocalDate dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+  public Integer getEstimatedDeliveryTime() {
+    return estimatedDeliveryTime;
   }
 
-  public @NotNull LocalDate getRegisteredDate() {
-    return registeredDate;
+  public void setEstimatedDeliveryTime(Integer estimatedDeliveryTime) {
+    this.estimatedDeliveryTime = estimatedDeliveryTime;
   }
 
-  public void setRegisteredDate(@NotNull LocalDate registeredDate) {
-    this.registeredDate = registeredDate;
+  public String getImageUrl() {
+    return imageUrl;
   }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public LocalDate getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(LocalDate lastUpdated) {
+    this.lastUpdated = lastUpdated;
+  }
+
 
 }

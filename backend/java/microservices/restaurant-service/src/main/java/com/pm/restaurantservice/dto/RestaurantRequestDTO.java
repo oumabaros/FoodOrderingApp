@@ -1,72 +1,112 @@
 package com.pm.restaurantservice.dto;
 
-import com.pm.restaurantservice.dto.validators.CreateRestaurantValidationGroup;
-import jakarta.validation.constraints.Email;
+import com.pm.restaurantservice.model.MenuItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RestaurantRequestDTO {
 
-  @NotBlank(message = "Name is required")
+  @NotBlank(message = "Restaurant Name is required")
   @Size(max = 100, message = "Name cannot exceed 100 characters")
-  private String name;
+  private String restaurantName;
+  @NotBlank(message = "City is required")
+  @Size(max = 100, message = "City cannot exceed 100 characters")
+  private String city;
+  @NotBlank(message = "Country is required")
+  @Size(max = 100, message = "Country cannot exceed 100 characters")
+  private String country;
+  @NotBlank(message = "Delivery Price is required")
+  private Double deliveryPrice;
+  @NotBlank(message = "Estimated Delivery Time is required")
+  private Integer estimatedDeliveryTime;
+  @NotBlank(message = "Image is required")
+  private String imageUrl;
+  private LocalDate lastUpdated;
+  private List<MenuItem> menuItems = new ArrayList<>();
+  @NotBlank(message = "User is required")
+  private String userId;
+  private String cuisines ;
 
-  @NotBlank(message = "Email is required")
-  @Email(message = "Email should be valid")
-  private String email;
-
-  @NotBlank(message = "Address is required")
-  private String address;
-
-  @NotBlank(message = "Date of birth is required")
-  private String dateOfBirth;
-
-  @NotBlank(groups = CreateRestaurantValidationGroup.class, message =
-      "Registered date is required")
-  private String registeredDate;
-
-  public @NotBlank(message = "Name is required") @Size(max = 100, message = "Name cannot exceed 100 characters") String getName() {
-    return name;
+  public String getRestaurantName() {
+    return restaurantName;
   }
 
-  public void setName(
-      @NotBlank(message = "Name is required") @Size(max = 100, message = "Name cannot exceed 100 characters") String name) {
-    this.name = name;
+  public void setRestaurantName(@NotBlank(message = "Restaurant Name is required") String restaurantName) {
+    this.restaurantName = restaurantName;
   }
 
-  public @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String getEmail() {
-    return email;
+  public String getCity() {
+    return city;
   }
 
-  public void setEmail(
-      @NotBlank(message = "Email is required") @Email(message = "Email should be valid") String email) {
-    this.email = email;
+  public void setCity(@NotBlank(message = "City is required") String city) {
+    this.city = city;
   }
 
-  public @NotBlank(message = "Address is required") String getAddress() {
-    return address;
+  public String getCountry() {
+    return country;
   }
 
-  public void setAddress(
-      @NotBlank(message = "Address is required") String address) {
-    this.address = address;
+  public void setCountry(@NotBlank(message = "Country is required") String country) {
+    this.country = country;
   }
 
-  public @NotBlank(message = "Date of birth is required") String getDateOfBirth() {
-    return dateOfBirth;
+  public Double getDeliveryPrice() {
+    return deliveryPrice;
   }
 
-  public void setDateOfBirth(
-      @NotBlank(message = "Date of birth is required") String dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+  public void setDeliveryPrice(@NotBlank(message = "Delivery Price is required") Double deliveryPrice) {
+    this.deliveryPrice = deliveryPrice;
   }
 
-  public String getRegisteredDate() {
-    return registeredDate;
+  public Integer getEstimatedDeliveryTime() {
+    return estimatedDeliveryTime;
   }
 
-  public void setRegisteredDate(String registeredDate) {
-    this.registeredDate = registeredDate;
+  public void setEstimatedDeliveryTime(@NotBlank(message = "Estimated Delivery Time is required") Integer estimatedDeliveryTime) {
+    this.estimatedDeliveryTime = estimatedDeliveryTime;
   }
 
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(@NotBlank(message = "Image is required") String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public LocalDate getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(LocalDate lastUpdated) {
+    this.lastUpdated = lastUpdated;
+  }
+
+  public List<MenuItem> getMenuItems() {
+    return menuItems;
+  }
+
+  public void setMenuItems(List<MenuItem> menuItems) {
+    this.menuItems = menuItems;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(@NotBlank(message = "User ID is required") String userId) {
+    this.userId = userId;
+  }
+
+  public String getCuisines() {
+    return cuisines;
+  }
+
+  public void setCuisines(String cuisines) {
+    this.cuisines = cuisines;
+  }
 }

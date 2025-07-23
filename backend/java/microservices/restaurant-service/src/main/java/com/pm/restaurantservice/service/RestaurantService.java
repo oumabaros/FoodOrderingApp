@@ -36,17 +36,11 @@ public class RestaurantService {
   }
 
   public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO restaurantRequestDTO) {
-    if (restaurantRepository.existsByEmail(restaurantRequestDTO.getEmail())) {
-      throw new EmailAlreadyExistsException(
-          "A restaurant with this email " + "already exists"
-              + restaurantRequestDTO.getEmail());
-    }
-
     Restaurant newRestaurant = restaurantRepository.save(
         RestaurantMapper.toModel(restaurantRequestDTO));
 
     billingServiceGrpcClient.createBillingAccount(newRestaurant.getId().toString(),
-        newRestaurant.getName(), newRestaurant.getEmail());
+        newRestaurant.getRestaurantName(), newRestaurant.getRestaurantName());
 
     kafkaProducer.sendEvent(newRestaurant);
 
@@ -59,17 +53,18 @@ public class RestaurantService {
     Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(
         () -> new RestaurantNotFoundException("Restaurant not found with ID: " + id));
 
-    if (restaurantRepository.existsByEmailAndIdNot(restaurantRequestDTO.getEmail(),
-        id)) {
-      throw new EmailAlreadyExistsException(
-          "A restaurant with this email " + "already exists"
-              + restaurantRequestDTO.getEmail());
-    }
 
-    restaurant.setName(restaurantRequestDTO.getName());
-    restaurant.setAddress(restaurantRequestDTO.getAddress());
-    restaurant.setEmail(restaurantRequestDTO.getEmail());
-    restaurant.setDateOfBirth(LocalDate.parse(restaurantRequestDTO.getDateOfBirth()));
+
+    restaurant.setRestaurantName(restaurantRequestDTO.getRestaurantName());
+    restaurant.setCity(restaurantRequestDTO.getCity());
+    restaurant.setCountry(restaurantRequestDTO.getCountry());
+    restaurant.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
+    restaurant.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
+    restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
+    restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
+    restaurant.setMenuItems(restaurantRequestDTO.getMenuItems());
+    restaurant.setUserId(restaurantRequestDTO.getUserId());
+    restaurant.setCuisines(restaurantRequestDTO.getCuisines());
 
     Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
     return RestaurantMapper.toDTO(updatedRestaurant);

@@ -20,8 +20,8 @@ public class KafkaProducer {
   public void sendEvent(Restaurant restaurant) {
     RestaurantEvent event = RestaurantEvent.newBuilder()
         .setRestaurantId(restaurant.getId().toString())
-        .setName(restaurant.getName())
-        .setEmail(restaurant.getEmail())
+        .setName(restaurant.getRestaurantName())
+        .setCity(restaurant.getCity())
         .setEventType("RESTAURANT_CREATED")
         .build();
 

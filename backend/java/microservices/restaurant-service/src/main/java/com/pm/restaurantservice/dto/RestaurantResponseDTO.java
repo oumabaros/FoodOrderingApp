@@ -1,51 +1,120 @@
 package com.pm.restaurantservice.dto;
 
-public class RestaurantResponseDTO {
-  private String id;
-  private String name;
-  private String email;
-  private String address;
-  private String dateOfBirth;
+import com.pm.restaurantservice.model.MenuItem;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-  public String getId() {
-    return id;
-  }
+public class RestaurantResponseDTO {
+
+  private String id;
 
   public void setId(String id) {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getId() {
+    return id;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public String getRestaurantName() {
+    return restaurantName;
   }
 
-  public String getEmail() {
-    return email;
+  public void setRestaurantName(String restaurantName) {
+    this.restaurantName = restaurantName;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public String getCity() {
+    return city;
   }
 
-  public String getAddress() {
-    return address;
+  public void setCity(String city) {
+    this.city = city;
   }
 
-  public void setAddress(String address) {
-    this.address = address;
+  public String getCountry() {
+    return country;
   }
 
-  public String getDateOfBirth() {
-    return dateOfBirth;
+  public void setCountry(String country) {
+    this.country = country;
   }
 
-  public void setDateOfBirth(String dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+  public Double getDeliveryPrice() {
+    return deliveryPrice;
   }
 
+  public void setDeliveryPrice(Double deliveryPrice) {
+    this.deliveryPrice = deliveryPrice;
+  }
 
+  public Integer getEstimatedDeliveryTime() {
+    return estimatedDeliveryTime;
+  }
+
+  public void setEstimatedDeliveryTime(Integer estimatedDeliveryTime) {
+    this.estimatedDeliveryTime = estimatedDeliveryTime;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public LocalDate getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(LocalDate lastUpdated) {
+    this.lastUpdated = lastUpdated;
+  }
+
+  public List<MenuItem> getMenuItems() {
+    return menuItems;
+  }
+
+  public void setMenuItems(List<MenuItem> menuItems) {
+    this.menuItems = menuItems;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public String getCuisines() {
+    return cuisines;
+  }
+
+  public void setCuisines(String cuisines) {
+    this.cuisines = cuisines;
+  }
+
+  private String restaurantName;
+
+  private String city;
+
+  private String country;
+
+  private Double deliveryPrice;
+
+  private Integer estimatedDeliveryTime;
+
+  private String imageUrl;
+
+  private LocalDate lastUpdated;
+
+  private List<MenuItem> menuItems = new ArrayList<>();
+
+
+  private String userId;
+
+  private String cuisines ;
 }

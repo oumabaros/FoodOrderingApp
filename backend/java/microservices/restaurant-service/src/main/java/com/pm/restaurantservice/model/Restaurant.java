@@ -27,7 +27,7 @@ public class Restaurant {
   @NotNull
   private LocalDate lastUpdated;
   @NotNull
-  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL)
   private List<MenuItem> menuItems = new ArrayList<>();
 
   @NotNull

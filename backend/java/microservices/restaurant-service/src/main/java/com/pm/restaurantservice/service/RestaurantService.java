@@ -2,14 +2,12 @@ package com.pm.restaurantservice.service;
 
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
-import com.pm.restaurantservice.exception.EmailAlreadyExistsException;
 import com.pm.restaurantservice.exception.RestaurantNotFoundException;
 import com.pm.restaurantservice.grpc.BillingServiceGrpcClient;
 import com.pm.restaurantservice.kafka.KafkaProducer;
 import com.pm.restaurantservice.mapper.RestaurantMapper;
 import com.pm.restaurantservice.model.Restaurant;
 import com.pm.restaurantservice.repository.RestaurantRepository;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;

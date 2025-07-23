@@ -45,9 +45,9 @@ spring:
   jpa:
       hibernate:
         ddl-auto: update
-  sql:
-      init:
-        mode: always
+#  sql:
+#      init:
+#        mode: always
 management:
   endpoints:
     web:

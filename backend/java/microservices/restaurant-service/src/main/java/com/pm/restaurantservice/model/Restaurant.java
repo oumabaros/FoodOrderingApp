@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "restaurants")
@@ -27,8 +28,8 @@ public class Restaurant {
   @NotNull
   private LocalDate lastUpdated;
   @NotNull
-  @OneToMany(cascade = CascadeType.ALL)
-  private List<MenuItem> menuItems = new ArrayList<>();
+  @OneToMany(mappedBy="restaurant")
+  private Set<MenuItem> menuItems;
 
   @NotNull
   private String userId;
@@ -54,14 +55,13 @@ public class Restaurant {
     this.userId = userId;
   }
 
-  public List<MenuItem> getMenuItems() {
+  public Set<MenuItem> getMenuItems() {
     return menuItems;
   }
 
-  public void setMenuItems(List<MenuItem> menuItems) {
+  public void setMenuItems(Set<MenuItem> menuItems) {
     this.menuItems = menuItems;
   }
-
 
   public UUID getId() {
     return id;

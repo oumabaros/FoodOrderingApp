@@ -1,6 +1,7 @@
 package com.pm.restaurantservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -9,13 +10,27 @@ public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @NotNull
     private String name;
 
     public UUID getId() {
         return id;
     }
 
+    @NotNull
     public Double price;
+
+    @ManyToOne
+    @JoinColumn(name="restaurant_id", nullable=false)
+    private Restaurant restaurant;
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 
     public Double getPrice() {
         return price;

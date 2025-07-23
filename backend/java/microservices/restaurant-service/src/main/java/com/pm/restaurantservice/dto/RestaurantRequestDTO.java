@@ -28,7 +28,7 @@ public class RestaurantRequestDTO {
   private List<MenuItem> menuItems = new ArrayList<>();
   @NotBlank(message = "User is required")
   private String userId;
-  private String cuisines ;
+  private List<String> cuisines = new ArrayList<>();
 
   public String getRestaurantName() {
     return restaurantName;
@@ -102,11 +102,11 @@ public class RestaurantRequestDTO {
     this.userId = userId;
   }
 
-  public String getCuisines() {
+  public List<String> getCuisines() {
     return cuisines;
   }
 
-  public void setCuisines(String cuisines) {
+  public void setCuisines(List<String> cuisines) {
     this.cuisines = cuisines;
   }
 }

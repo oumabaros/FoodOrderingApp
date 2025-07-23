@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "restaurants")
 public class Restaurant {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,13 +33,16 @@ public class Restaurant {
   @NotNull
   private String userId;
 
-  private String cuisines ;
+  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+  @CollectionTable(name = "cuisines", joinColumns = @JoinColumn(name = "restaurant_id"))
+  @Column(name = "cuisine", nullable = false)
+  private List<String> cuisines = new ArrayList<>();
 
-  public String getCuisines() {
+  public List<String> getCuisines() {
     return cuisines;
   }
 
-  public void setCuisines(String cuisines) {
+  public void setCuisines(List<String> cuisines) {
     this.cuisines = cuisines;
   }
 

@@ -4,6 +4,7 @@ import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.model.Restaurant;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public class RestaurantMapper {
   public static RestaurantResponseDTO toDTO(Restaurant restaurant) {

@@ -89,11 +89,11 @@ public class RestaurantResponseDTO {
     this.userId = userId;
   }
 
-  public String getCuisines() {
+  public List<String> getCuisines() {
     return cuisines;
   }
 
-  public void setCuisines(String cuisines) {
+  public void setCuisines(List<String> cuisines) {
     this.cuisines = cuisines;
   }
 
@@ -116,5 +116,5 @@ public class RestaurantResponseDTO {
 
   private String userId;
 
-  private String cuisines ;
+  private List<String> cuisines = new ArrayList<>();
 }

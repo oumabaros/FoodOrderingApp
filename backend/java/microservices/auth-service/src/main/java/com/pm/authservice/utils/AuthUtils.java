@@ -40,7 +40,16 @@ public class AuthUtils {
             return idToken.getClaimAsString("sub");
 
         }
-        throw new IllegalStateException("Oauth2 Security Context not found!");
+        else if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+            Jwt jwt = jwtAuthenticationToken.getToken();
+
+            return jwt.getClaimAsString("sub");
+        }
+        else{
+            System.out.println("DETAILS {}"+authentication.getDetails().toString());
+            throw new IllegalStateException("Oauth2 Security Context not found!");
+        }
+
     }
 
     public static String getUserEmail() {
@@ -53,6 +62,14 @@ public class AuthUtils {
             return idToken.getClaimAsString("email");
 
         }
-        throw new IllegalStateException("Oauth2 Security Context not found!");
+        else if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+            Jwt jwt = jwtAuthenticationToken.getToken();
+
+            return jwt.getClaimAsString("sub");
+        }
+        else{
+            throw new IllegalStateException("Oauth2 Security Context not found!");
+        }
+
     }
 }

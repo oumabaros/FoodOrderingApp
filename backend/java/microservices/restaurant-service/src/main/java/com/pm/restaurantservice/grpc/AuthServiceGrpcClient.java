@@ -1,12 +1,8 @@
 package com.pm.restaurantservice.grpc;
 
-
 import auth.AuthRequest;
 import auth.AuthResponse;
 import auth.AuthServiceGrpc;
-import billing.BillingRequest;
-import billing.BillingResponse;
-import billing.BillingServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -20,15 +16,14 @@ public class AuthServiceGrpcClient {
             AuthServiceGrpcClient.class);
     private final AuthServiceGrpc.AuthServiceBlockingStub blockingStub;
 
-    public AuthServiceGrpcClient(
-            @Value("${auth.service.grpc.address}") String serverAddress,
-            @Value("${auth.service.grpc.port}") int serverPort) {
+    public AuthServiceGrpcClient( @Value("${auth.service.address}") String serverAddress,
+                                  @Value("${auth.service.port}") int serverPort
+            ) {
 
         log.info("Connecting to Auth Service GRPC service at {}:{}",
                 serverAddress, serverPort);
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(serverAddress,
-                serverPort).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(serverAddress, serverPort).usePlaintext().build();
 
         blockingStub = AuthServiceGrpc.newBlockingStub(channel);
     }

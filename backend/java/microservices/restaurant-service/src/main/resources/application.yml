@@ -1,3 +1,7 @@
+auth0:
+  domain: https://oumabaros.us.auth0.com
+  audience: mern-food-ordering-app-api
+  jwk-set-uri: https://oumabaros.us.auth0.com/.well-known/jwks.json
 spring:
   application:
     name: restaurant-service
@@ -5,6 +9,14 @@ spring:
     active: dev
   config:
     import: "optional:configserver:"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${auth0.domain}/
+          audiences:
+            - ${auth0.audience}
+          jwk-set-uri: ${auth0.jwk-set-uri}
   cloud:
     config:
       uri: http://config-service:8888
@@ -42,9 +54,8 @@ billing:
     port: 9001
 auth:
   service:
-    grpc:
       address: http://auth-service
-      port: 4005
+      port: 9002
 
 
 

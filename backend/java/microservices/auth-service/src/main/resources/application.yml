@@ -55,3 +55,6 @@ management:
         include: refresh
 auth:
   greeting: Hey auth
+grpc:
+  server:
+    port: 9002

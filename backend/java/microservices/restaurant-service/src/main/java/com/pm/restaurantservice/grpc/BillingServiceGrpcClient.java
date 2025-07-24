@@ -19,7 +19,7 @@ public class BillingServiceGrpcClient {
 
   public BillingServiceGrpcClient(
       @Value("${billing.service.address}") String serverAddress,
-      @Value("${billing.service.grpc.port}") int serverPort) {
+      @Value("${billing.service.port}") int serverPort) {
 
     log.info("Connecting to Billing Service GRPC service at {}:{}",
         serverAddress, serverPort);

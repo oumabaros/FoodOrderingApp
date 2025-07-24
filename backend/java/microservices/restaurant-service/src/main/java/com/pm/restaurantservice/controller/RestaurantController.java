@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.groups.Default;
 import java.util.List;
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,23 +22,36 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 @RestController
 @RequestMapping("/my/restaurants")
 @Tag(name = "Restaurant", description = "API for managing Restaurants")
 public class RestaurantController {
-
+  private static final Logger log = LoggerFactory.getLogger(
+          RestaurantController.class);
   private final RestaurantService restaurantService;
 
   public RestaurantController(RestaurantService restaurantService) {
     this.restaurantService = restaurantService;
   }
 
-  @GetMapping("authid")
+  @GetMapping("/authid")
   @Operation(summary = "Get Auth0Id")
-  public ResponseEntity<String> getAuthId() {
-    String authId = restaurantService.getAuth0Id();
-    return ResponseEntity.ok().body(authId);
+  public ResponseEntity<String> getAuthId(Authentication authentication) {
+
+   if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+      Jwt jwt = jwtAuthenticationToken.getToken();
+      return ResponseEntity.ok().body(jwt.getClaimAsString("sub"));
+
+    }
+    else{
+      System.out.println("DETAILS {}"+authentication.getDetails().toString());
+      throw new IllegalStateException("Oauth2 Security Context not found!");
+    }
+
   }
   @GetMapping
   @Operation(summary = "Get Restaurants")

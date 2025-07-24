@@ -5,6 +5,9 @@ auth0:
 spring:
   application:
     name: restaurant-service
+  servlet:
+    multipart:
+      enabled: true
   profiles:
     active: dev
   config:
@@ -56,6 +59,10 @@ auth:
   service:
       address: http://auth-service
       port: 9002
+cloudinary:
+  cloud_name: dwgu3hrk4
+  api_key: 759921766696886
+  api_secret: wwVhaMApZ9w1dXrHrx2PmRxt0QE
 
 
 

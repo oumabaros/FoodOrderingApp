@@ -22,8 +22,6 @@ public class RestaurantRequestDTO {
   private Double deliveryPrice;
   @NotBlank(message = "Estimated Delivery Time is required")
   private Integer estimatedDeliveryTime;
-  @NotBlank(message = "Image is required")
-  private String imageUrl;
   private LocalDate lastUpdated;
   private List<MenuItem> menuItems = new ArrayList<>();
   @NotBlank(message = "User is required")
@@ -68,14 +66,6 @@ public class RestaurantRequestDTO {
 
   public void setEstimatedDeliveryTime(@NotBlank(message = "Estimated Delivery Time is required") Integer estimatedDeliveryTime) {
     this.estimatedDeliveryTime = estimatedDeliveryTime;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(@NotBlank(message = "Image is required") String imageUrl) {
-    this.imageUrl = imageUrl;
   }
 
   public LocalDate getLastUpdated() {

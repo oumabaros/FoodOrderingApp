@@ -12,17 +12,11 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/my/restaurants")
@@ -59,10 +53,11 @@ public class RestaurantController {
   @Operation(summary = "Create a new Restaurant")
   public ResponseEntity<RestaurantResponseDTO> createRestaurant(
       @Validated({Default.class, CreateRestaurantValidationGroup.class})
-      @RequestBody RestaurantRequestDTO restaurantRequestDTO) {
+      @RequestBody RestaurantRequestDTO restaurantRequestDTO,
+      @RequestParam("imageUrl") MultipartFile imageUrl) {
 
     RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
-        restaurantRequestDTO);
+        restaurantRequestDTO,imageUrl);
 
     return ResponseEntity.ok().body(restaurantResponseDTO);
   }

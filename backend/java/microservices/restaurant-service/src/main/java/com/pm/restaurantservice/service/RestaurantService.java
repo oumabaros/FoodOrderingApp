@@ -3,12 +3,15 @@ package com.pm.restaurantservice.service;
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.exception.RestaurantNotFoundException;
+import com.pm.restaurantservice.grpc.AuthServiceGrpcClient;
 import com.pm.restaurantservice.grpc.BillingServiceGrpcClient;
 import com.pm.restaurantservice.kafka.KafkaProducer;
 import com.pm.restaurantservice.mapper.RestaurantMapper;
+import com.pm.restaurantservice.model.MenuItem;
 import com.pm.restaurantservice.model.Restaurant;
 import com.pm.restaurantservice.repository.RestaurantRepository;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +21,16 @@ public class RestaurantService {
   private final RestaurantRepository restaurantRepository;
   private final BillingServiceGrpcClient billingServiceGrpcClient;
   private final KafkaProducer kafkaProducer;
+  private final AuthServiceGrpcClient authServiceGrpcClient;
 
   public RestaurantService(RestaurantRepository restaurantRepository,
       BillingServiceGrpcClient billingServiceGrpcClient,
+                           AuthServiceGrpcClient authServiceGrpcClient,
       KafkaProducer kafkaProducer) {
     this.restaurantRepository = restaurantRepository;
     this.billingServiceGrpcClient = billingServiceGrpcClient;
     this.kafkaProducer = kafkaProducer;
+    this.authServiceGrpcClient=authServiceGrpcClient;
   }
 
   public List<RestaurantResponseDTO> getRestaurants() {
@@ -33,6 +39,9 @@ public class RestaurantService {
     return restaurants.stream().map(RestaurantMapper::toDTO).toList();
   }
 
+  public String getAuth0Id(){
+    return authServiceGrpcClient.getAuth0Id();
+  }
   public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO restaurantRequestDTO) {
     Restaurant newRestaurant = restaurantRepository.save(
         RestaurantMapper.toModel(restaurantRequestDTO));
@@ -60,7 +69,7 @@ public class RestaurantService {
     restaurant.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
     restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
     restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
-    restaurant.setMenuItems(restaurantRequestDTO.getMenuItems());
+    restaurant.setMenuItems((Set<MenuItem>) restaurantRequestDTO.getMenuItems());
     restaurant.setUserId(restaurantRequestDTO.getUserId());
     restaurant.setCuisines(restaurantRequestDTO.getCuisines());
 

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "auth";
+
+service AuthService {
+  rpc GetAuth0Id (AuthRequest) returns (AuthResponse);
+}
+
+message AuthRequest {
+
+}
+
+message AuthResponse {
+  string authId = 1;
+  string email = 2;
+  string userId=3;
+}

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping("/my/restaurants")
 @Tag(name = "Restaurant", description = "API for managing Restaurants")
 public class RestaurantController {
 
@@ -31,6 +31,12 @@ public class RestaurantController {
     this.restaurantService = restaurantService;
   }
 
+  @GetMapping("authid")
+  @Operation(summary = "Get Auth0Id")
+  public ResponseEntity<String> getAuthId() {
+    String authId = restaurantService.getAuth0Id();
+    return ResponseEntity.ok().body(authId);
+  }
   @GetMapping
   @Operation(summary = "Get Restaurants")
   public ResponseEntity<List<RestaurantResponseDTO>> getRestaurants() {

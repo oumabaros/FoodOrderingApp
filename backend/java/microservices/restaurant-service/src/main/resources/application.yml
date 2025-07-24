@@ -36,6 +36,16 @@ restaurant:
 logging:
   level:
     root: info
+billing:
+  service:
+    address: http://billing-service
+    port: 9001
+auth:
+  service:
+    grpc:
+      address: http://auth-service
+      port: 4005
+
 
 
 

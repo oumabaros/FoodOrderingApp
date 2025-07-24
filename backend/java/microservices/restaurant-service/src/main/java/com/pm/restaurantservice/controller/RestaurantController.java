@@ -10,8 +10,6 @@ import jakarta.validation.groups.Default;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,8 +28,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 @RequestMapping("/my/restaurants")
 @Tag(name = "Restaurant", description = "API for managing Restaurants")
 public class RestaurantController {
-  private static final Logger log = LoggerFactory.getLogger(
-          RestaurantController.class);
   private final RestaurantService restaurantService;
 
   public RestaurantController(RestaurantService restaurantService) {
@@ -48,7 +44,6 @@ public class RestaurantController {
 
     }
     else{
-      System.out.println("DETAILS {}"+authentication.getDetails().toString());
       throw new IllegalStateException("Oauth2 Security Context not found!");
     }
 

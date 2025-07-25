@@ -53,14 +53,19 @@ public class RestaurantController {
   @Operation(summary = "Create a new Restaurant")
   public ResponseEntity<RestaurantResponseDTO> createRestaurant(
       @Validated({Default.class, CreateRestaurantValidationGroup.class})
-      @RequestBody RestaurantRequestDTO restaurantRequestDTO,
-      @RequestParam("imageUrl") MultipartFile imageUrl) {
+      @RequestPart RestaurantRequestDTO restaurantRequestDTO,
+      @RequestPart(value = "imageFile") MultipartFile imageFile,
+      Authentication authentication) {
 
     RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
-        restaurantRequestDTO,imageUrl);
-
-    return ResponseEntity.ok().body(restaurantResponseDTO);
-  }
+        restaurantRequestDTO,imageFile,authentication);
+    if(restaurantResponseDTO==null){
+      return ResponseEntity.status(204).body(null);
+    }
+    else{
+      return ResponseEntity.ok().body(restaurantResponseDTO);
+    }
+}
 
   @PutMapping("/{id}")
   @Operation(summary = "Update a new Restaurant")

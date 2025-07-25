@@ -36,7 +36,7 @@ public class Restaurant {
 
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "cuisines", joinColumns = @JoinColumn(name = "restaurant_id"))
-  @Column(name = "cuisine", nullable = false)
+  @Column(name = "cuisines", nullable = false)
   private List<String> cuisines = new ArrayList<>();
 
   public List<String> getCuisines() {

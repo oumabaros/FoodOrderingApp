@@ -3,6 +3,8 @@ package com.pm.restaurantservice.dto;
 import com.pm.restaurantservice.model.MenuItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,25 @@ public class RestaurantRequestDTO {
   @NotBlank(message = "User is required")
   private String userId;
   private List<String> cuisines = new ArrayList<>();
+  private String imageUrl;
+  @NotBlank(message = "Image is required")
+  private File imageFile;
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public File getImageFile() {
+    return imageFile;
+  }
+
+  public void setImageFile(File imageFile) {
+    this.imageFile = imageFile;
+  }
+
 
   public String getRestaurantName() {
     return restaurantName;

@@ -34,7 +34,7 @@ public class RestaurantMapper {
     restaurant.setCountry(restaurantRequestDTO.getCountry());
     restaurant.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
     restaurant.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
-    restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
+    //restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
     restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
     restaurant.setMenuItems((Set<MenuItem>) restaurantRequestDTO.getMenuItems());
     restaurant.setUserId(restaurantRequestDTO.getUserId());

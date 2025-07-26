@@ -2,15 +2,12 @@ package com.pm.restaurantservice.model;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Document
 public class Restaurant {
-
+  @NotNull
+  private String userId;
   @NotNull
   private String restaurantName;
   @NotNull
@@ -25,13 +22,23 @@ public class Restaurant {
   private String imageUrl;
   @NotNull
   private LocalDate lastUpdated;
-  private List<String> cuisines = new ArrayList<>();
+  private MenuItem[] menuItems;
+  @NotNull
+  private String[] cuisines;
 
-  public List<String> getCuisines() {
+  public MenuItem[] getMenuItems() {
+    return menuItems;
+  }
+
+  public void setMenuItems(MenuItem[] menuItems) {
+    this.menuItems = menuItems;
+  }
+
+  public String[] getCuisines() {
     return cuisines;
   }
 
-  public void setCuisines(List<String> cuisines) {
+  public void setCuisines(String[] cuisines) {
     this.cuisines = cuisines;
   }
 
@@ -91,5 +98,11 @@ public class Restaurant {
     this.lastUpdated = lastUpdated;
   }
 
+  public String getUserId() {
+    return userId;
+  }
 
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
 }

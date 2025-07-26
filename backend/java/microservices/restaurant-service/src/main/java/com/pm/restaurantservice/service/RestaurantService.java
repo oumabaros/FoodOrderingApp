@@ -14,8 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -57,7 +55,7 @@ public class RestaurantService {
     }
   }
   public RestaurantResponseDTO createRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO) {
-    if(restaurantRepository.existsByRestaurantName(restaurantRequestDTO.getRestaurantName())){
+    if(restaurantRepository.existsByUserId(restaurantRequestDTO.getUserId())){
       return RestaurantMapper.toDTO(null);
     }
     else{
@@ -83,28 +81,24 @@ public class RestaurantService {
     }
   }
 
-  public RestaurantResponseDTO updateRestaurant(UUID id,
+  public RestaurantResponseDTO updateRestaurant(String _id,
       RestaurantRequestDTO restaurantRequestDTO) {
 
-    Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(
-        () -> new RestaurantNotFoundException("Restaurant not found with ID: " + id));
-
-
+    Restaurant restaurant = restaurantRepository.findById(_id).orElseThrow(
+        () -> new RestaurantNotFoundException("Restaurant not found"));
 
     restaurant.setRestaurantName(restaurantRequestDTO.getRestaurantName());
     restaurant.setCity(restaurantRequestDTO.getCity());
     restaurant.setCountry(restaurantRequestDTO.getCountry());
     restaurant.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
     restaurant.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
-    //restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
+    restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
     restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
     restaurant.setCuisines(restaurantRequestDTO.getCuisines());
+    restaurant.setMenuItems(restaurantRequestDTO.getMenuItems());
 
     Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
     return RestaurantMapper.toDTO(updatedRestaurant);
   }
 
-  public void deleteRestaurant(UUID id) {
-    restaurantRepository.deleteById(id);
-  }
 }

@@ -1,109 +1,105 @@
 package com.pm.restaurantservice.dto;
 
+import com.pm.restaurantservice.model.MenuItem;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class RestaurantResponseDTO {
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-  private String id;
+    public String getUserId() {
+        return userId;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public String getRestaurantName() {
+        return restaurantName;
+    }
 
-  public String getId() {
-    return id;
-  }
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
 
-  public String getRestaurantName() {
-    return restaurantName;
-  }
+    public String getCity() {
+        return city;
+    }
 
-  public void setRestaurantName(String restaurantName) {
-    this.restaurantName = restaurantName;
-  }
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-  public String getCity() {
-    return city;
-  }
+    public String getCountry() {
+        return country;
+    }
 
-  public void setCity(String city) {
-    this.city = city;
-  }
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-  public String getCountry() {
-    return country;
-  }
+    public Double getDeliveryPrice() {
+        return deliveryPrice;
+    }
 
-  public void setCountry(String country) {
-    this.country = country;
-  }
+    public void setDeliveryPrice(Double deliveryPrice) {
+        this.deliveryPrice = deliveryPrice;
+    }
 
-  public Double getDeliveryPrice() {
-    return deliveryPrice;
-  }
+    public Integer getEstimatedDeliveryTime() {
+        return estimatedDeliveryTime;
+    }
 
-  public void setDeliveryPrice(Double deliveryPrice) {
-    this.deliveryPrice = deliveryPrice;
-  }
+    public void setEstimatedDeliveryTime(Integer estimatedDeliveryTime) {
+        this.estimatedDeliveryTime = estimatedDeliveryTime;
+    }
 
-  public Integer getEstimatedDeliveryTime() {
-    return estimatedDeliveryTime;
-  }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-  public void setEstimatedDeliveryTime(Integer estimatedDeliveryTime) {
-    this.estimatedDeliveryTime = estimatedDeliveryTime;
-  }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-  public String getImageUrl() {
-    return imageUrl;
-  }
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
 
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 
-  public LocalDate getLastUpdated() {
-    return lastUpdated;
-  }
+    public String[] getCuisines() {
+        return cuisines;
+    }
 
-  public void setLastUpdated(LocalDate lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
+    public void setCuisines(String[] cuisines) {
+        this.cuisines = cuisines;
+    }
 
-  public String getUserId() {
-    return userId;
-  }
+    public MenuItem[] getMenuItems() {
+        return menuItems;
+    }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+    public void setMenuItems(MenuItem[] menuItems) {
+        this.menuItems = menuItems;
+    }
 
-  public List<String> getCuisines() {
-    return cuisines;
-  }
+    private String restaurantName;
 
-  public void setCuisines(List<String> cuisines) {
-    this.cuisines = cuisines;
-  }
+    private String city;
 
-  private String restaurantName;
+    private String country;
 
-  private String city;
+    private Double deliveryPrice;
 
-  private String country;
+    private Integer estimatedDeliveryTime;
 
-  private Double deliveryPrice;
+    private String imageUrl;
 
-  private Integer estimatedDeliveryTime;
+    private LocalDate lastUpdated;
 
-  private String imageUrl;
-
-  private LocalDate lastUpdated;
-
-  private String userId;
-
-  private List<String> cuisines = new ArrayList<>();
+    private String[] cuisines;
+    private String userId;
+    private MenuItem[] menuItems;
 }

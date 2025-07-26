@@ -1,7 +1,6 @@
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import DetailsSection from "./DetailsSection";
 import { Separator } from "@/components/ui/separator";
 import CuisinesSection from "./CuisinesSection";
@@ -11,6 +10,7 @@ import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import type { Restaurant } from "@/types";
 import { useEffect } from "react";
+import { z } from "zod";
 
 const formSchema = z
   .object({
@@ -72,6 +72,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
 
   useEffect(() => {
     if (!restaurant) {
+      console.log("No restaurant data provided");
       return;
     }
 

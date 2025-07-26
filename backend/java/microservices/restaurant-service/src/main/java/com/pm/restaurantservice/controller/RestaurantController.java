@@ -52,9 +52,8 @@ public class RestaurantController {
   @PostMapping
   @Operation(summary = "Create a new Restaurant")
   public ResponseEntity<RestaurantResponseDTO> createRestaurant(
-      @Validated({Default.class, CreateRestaurantValidationGroup.class})
       @ModelAttribute RestaurantRequestDTO restaurantRequestDTO) {
-    System.out.println("DTO: "+restaurantRequestDTO);
+
     RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
         restaurantRequestDTO);
     if(restaurantResponseDTO==null){
@@ -67,19 +66,14 @@ public class RestaurantController {
 
   @PutMapping("/{id}")
   @Operation(summary = "Update a new Restaurant")
-  public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable UUID id,
+  public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable String _id,
       @Validated({Default.class}) @RequestBody RestaurantRequestDTO restaurantRequestDTO) {
 
-    RestaurantResponseDTO restaurantResponseDTO = restaurantService.updateRestaurant(id,
+    RestaurantResponseDTO restaurantResponseDTO = restaurantService.updateRestaurant(_id,
         restaurantRequestDTO);
 
     return ResponseEntity.ok().body(restaurantResponseDTO);
   }
 
-  @DeleteMapping("/{id}")
-  @Operation(summary = "Delete a Restaurant")
-  public ResponseEntity<Void> deleteRestaurant(@PathVariable UUID id) {
-    restaurantService.deleteRestaurant(id);
-    return ResponseEntity.noContent().build();
-  }
+
 }

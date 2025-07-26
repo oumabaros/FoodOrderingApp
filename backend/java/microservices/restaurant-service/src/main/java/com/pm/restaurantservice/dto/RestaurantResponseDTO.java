@@ -1,9 +1,9 @@
 package com.pm.restaurantservice.dto;
 
-import com.pm.restaurantservice.model.MenuItem;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RestaurantResponseDTO {
 
@@ -73,14 +73,6 @@ public class RestaurantResponseDTO {
     this.lastUpdated = lastUpdated;
   }
 
-  public List<MenuItem> getMenuItems() {
-    return menuItems;
-  }
-
-  public void setMenuItems(List<MenuItem> menuItems) {
-    this.menuItems = menuItems;
-  }
-
   public String getUserId() {
     return userId;
   }
@@ -110,9 +102,6 @@ public class RestaurantResponseDTO {
   private String imageUrl;
 
   private LocalDate lastUpdated;
-
-  private List<MenuItem> menuItems = new ArrayList<>();
-
 
   private String userId;
 

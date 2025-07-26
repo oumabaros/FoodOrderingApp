@@ -5,6 +5,14 @@ auth0:
 spring:
   application:
     name: restaurant-service
+  data:
+    mongodb:
+      host: food-app-service-db
+      database: food-app
+      username: admin
+      password: admin
+      port: 27017
+      authentication-database: admin
   servlet:
     multipart:
       enabled: true

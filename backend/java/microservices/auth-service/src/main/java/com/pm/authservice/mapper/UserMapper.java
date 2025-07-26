@@ -8,7 +8,6 @@ import com.pm.authservice.model.User;
 public class UserMapper {
   public static UserResponseDTO toDTO(User user) {
     UserResponseDTO userDTO = new UserResponseDTO();
-    userDTO.setId(user.getId().toString());
     userDTO.setName(user.getName());
     userDTO.setAddressLine1(user.getAddressLine1());
     userDTO.setEmail(user.getEmail());

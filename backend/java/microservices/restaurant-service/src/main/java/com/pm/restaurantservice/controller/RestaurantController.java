@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.multipart.MultipartFile;
+
 
 @RestController
-@RequestMapping("/my/restaurants")
+@RequestMapping("/my/restaurant")
 @Tag(name = "Restaurant", description = "API for managing Restaurants")
 public class RestaurantController {
   private final RestaurantService restaurantService;
@@ -53,12 +53,10 @@ public class RestaurantController {
   @Operation(summary = "Create a new Restaurant")
   public ResponseEntity<RestaurantResponseDTO> createRestaurant(
       @Validated({Default.class, CreateRestaurantValidationGroup.class})
-      @RequestPart RestaurantRequestDTO restaurantRequestDTO,
-      @RequestPart(value = "imageFile") MultipartFile imageFile,
-      Authentication authentication) {
-
+      @ModelAttribute RestaurantRequestDTO restaurantRequestDTO) {
+    System.out.println("DTO: "+restaurantRequestDTO);
     RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
-        restaurantRequestDTO,imageFile,authentication);
+        restaurantRequestDTO);
     if(restaurantResponseDTO==null){
       return ResponseEntity.status(204).body(null);
     }

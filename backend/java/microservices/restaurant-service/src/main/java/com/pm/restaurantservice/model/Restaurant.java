@@ -1,18 +1,16 @@
 package com.pm.restaurantservice.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-@Entity(name = "restaurants")
+@Document
 public class Restaurant {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+
   @NotNull
   private String restaurantName;
   @NotNull
@@ -27,16 +25,6 @@ public class Restaurant {
   private String imageUrl;
   @NotNull
   private LocalDate lastUpdated;
-  @NotNull
-  @OneToMany(mappedBy="restaurant")
-  private Set<MenuItem> menuItems;
-
-  @NotNull
-  private String userId;
-
-  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-  @CollectionTable(name = "cuisines", joinColumns = @JoinColumn(name = "restaurant_id"))
-  @Column(name = "cuisines", nullable = false)
   private List<String> cuisines = new ArrayList<>();
 
   public List<String> getCuisines() {
@@ -45,26 +33,6 @@ public class Restaurant {
 
   public void setCuisines(List<String> cuisines) {
     this.cuisines = cuisines;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
-
-  public Set<MenuItem> getMenuItems() {
-    return menuItems;
-  }
-
-  public void setMenuItems(Set<MenuItem> menuItems) {
-    this.menuItems = menuItems;
-  }
-
-  public UUID getId() {
-    return id;
   }
 
   public String getRestaurantName() {

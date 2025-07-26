@@ -1,9 +1,7 @@
 package com.pm.authservice.mapper;
 
 import com.pm.authservice.dto.UserReqDTO;
-import com.pm.authservice.dto.UserRequestDTO;
 import com.pm.authservice.dto.UserResDTO;
-import com.pm.authservice.dto.UserResponseDTO;
 import com.pm.authservice.model.User;
 
 public class UserMpa {

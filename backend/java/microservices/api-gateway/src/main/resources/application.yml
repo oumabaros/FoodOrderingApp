@@ -79,7 +79,7 @@ spring:
         - id: restaurant-service-route
           uri: http://host.docker.internal:4000
           predicates:
-            - Path=/api/my/restaurants/**
+            - Path=/api/my/restaurant/**
           filters:
             - AddResponseHeader=X-CORS-Enabled, true
             - RewritePath=/api/(?<segment>.*), /${segment}
@@ -88,9 +88,9 @@ spring:
         - id: api-docs-restaurant-route
           uri: http://host.docker.internal:4000
           predicates:
-            - Path=/api-docs/restaurants
+            - Path=/api-docs/restaurant
           filters:
-            - RewritePath=/api-docs/restaurants,/v3/api-docs
+            - RewritePath=/api-docs/restaurant,/v3/api-docs
 
         - id: api-docs-auth-route
           uri: http:/host.docker.internal:4005

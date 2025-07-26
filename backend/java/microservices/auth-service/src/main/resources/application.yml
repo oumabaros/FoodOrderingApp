@@ -5,6 +5,14 @@ auth0:
 server:
   port: 4005
 spring:
+  data:
+    mongodb:
+      host: food-app-service-db
+      database: food-app
+      username: admin
+      password: admin
+      port: 27017
+      authentication-database: admin
   kafka:
     producer:
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
@@ -38,16 +46,7 @@ spring:
     active: dev
   config:
     import: "optional:configserver:"
-  datasource:
-    password: password
-    url: jdbc:postgresql://auth-service-db:5432/db
-    username: admin_user
-  jpa:
-      hibernate:
-        ddl-auto: update
-#  sql:
-#      init:
-#        mode: always
+
 management:
   endpoints:
     web:

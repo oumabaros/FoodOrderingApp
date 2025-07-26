@@ -6,13 +6,13 @@ import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.exception.RestaurantNotFoundException;
 import com.pm.restaurantservice.mapper.RestaurantMapper;
-import com.pm.restaurantservice.model.MenuItem;
 import com.pm.restaurantservice.model.Restaurant;
 import com.pm.restaurantservice.repository.RestaurantRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -24,7 +24,7 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,21 +56,23 @@ public class RestaurantService {
       return null;
     }
   }
-  public RestaurantResponseDTO createRestaurant(@RequestPart RestaurantRequestDTO restaurantRequestDTO,
-                                                @RequestPart(value = "imageFile") MultipartFile imageFile,
-                                                Authentication authentication) {
-    if(restaurantRepository.existsByUserId(getAuth0Id(authentication))){
+  public RestaurantResponseDTO createRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO) {
+    if(restaurantRepository.existsByRestaurantName(restaurantRequestDTO.getRestaurantName())){
       return RestaurantMapper.toDTO(null);
     }
     else{
       try {
+        MultipartFile imageFile = (MultipartFile) restaurantRequestDTO.getImageFile();
         File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(imageFile.getBytes());
         fos.close();
 
         var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
+
         restaurantRequestDTO.setImageUrl(pic.get("url").toString());
+        LocalDate lt = LocalDate.now();
+        restaurantRequestDTO.setLastUpdated(lt);
         Restaurant newRestaurant=restaurantRepository.save(
                 RestaurantMapper.toModel(restaurantRequestDTO));
         return RestaurantMapper.toDTO(newRestaurant);
@@ -96,8 +98,6 @@ public class RestaurantService {
     restaurant.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
     //restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
     restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
-    restaurant.setMenuItems((Set<MenuItem>) restaurantRequestDTO.getMenuItems());
-    restaurant.setUserId(restaurantRequestDTO.getUserId());
     restaurant.setCuisines(restaurantRequestDTO.getCuisines());
 
     Restaurant updatedRestaurant = restaurantRepository.save(restaurant);

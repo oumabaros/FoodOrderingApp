@@ -1,6 +1,5 @@
 package com.pm.restaurantservice.dto;
 
-import com.pm.restaurantservice.model.MenuItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -8,6 +7,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RestaurantRequestDTO {
 
@@ -25,9 +25,6 @@ public class RestaurantRequestDTO {
   @NotBlank(message = "Estimated Delivery Time is required")
   private Integer estimatedDeliveryTime;
   private LocalDate lastUpdated;
-  private List<MenuItem> menuItems = new ArrayList<>();
-  @NotBlank(message = "User is required")
-  private String userId;
   private List<String> cuisines = new ArrayList<>();
   private String imageUrl;
   @NotBlank(message = "Image is required")
@@ -97,21 +94,7 @@ public class RestaurantRequestDTO {
     this.lastUpdated = lastUpdated;
   }
 
-  public List<MenuItem> getMenuItems() {
-    return menuItems;
-  }
 
-  public void setMenuItems(List<MenuItem> menuItems) {
-    this.menuItems = menuItems;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(@NotBlank(message = "User ID is required") String userId) {
-    this.userId = userId;
-  }
 
   public List<String> getCuisines() {
     return cuisines;

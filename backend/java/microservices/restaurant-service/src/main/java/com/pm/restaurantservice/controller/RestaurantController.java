@@ -28,6 +28,15 @@ public class RestaurantController {
     this.restaurantService = restaurantService;
   }
 
+  @GetMapping
+  @Operation(summary = "Get Restaurant")
+  public ResponseEntity<RestaurantResponseDTO> getRestaurant(Authentication authentication) {
+    RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
+    if (restaurantResponseDTO==null){
+      return ResponseEntity.status(404).body(restaurantResponseDTO);
+    }
+    return ResponseEntity.ok().body(restaurantResponseDTO);
+  }
   @GetMapping("/authid")
   @Operation(summary = "Get Auth0Id")
   public ResponseEntity<String> getAuthId(Authentication authentication) {
@@ -42,20 +51,14 @@ public class RestaurantController {
     }
 
   }
-  @GetMapping
-  @Operation(summary = "Get Restaurants")
-  public ResponseEntity<List<RestaurantResponseDTO>> getRestaurants() {
-    List<RestaurantResponseDTO> restaurants = restaurantService.getRestaurants();
-    return ResponseEntity.ok().body(restaurants);
-  }
-
   @PostMapping
   @Operation(summary = "Create a new Restaurant")
   public ResponseEntity<RestaurantResponseDTO> createRestaurant(
-      @ModelAttribute RestaurantRequestDTO restaurantRequestDTO) {
+      @ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
+      Authentication authentication) {
 
     RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
-        restaurantRequestDTO);
+        restaurantRequestDTO,authentication);
     if(restaurantResponseDTO==null){
       return ResponseEntity.status(204).body(null);
     }

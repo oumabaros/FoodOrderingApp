@@ -31,6 +31,16 @@ public class RestaurantRequestDTO {
     private MenuItem[] menuItems;
     @NotBlank
     private String userId;
+    private String auth0Id;
+
+    public String getAuth0Id() {
+        return auth0Id;
+    }
+
+    public void setAuth0Id(String auth0Id) {
+        this.auth0Id = auth0Id;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }

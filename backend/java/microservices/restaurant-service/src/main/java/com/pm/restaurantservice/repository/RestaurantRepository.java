@@ -8,8 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends MongoRepository<Restaurant, String> {
-    boolean existsByRestaurantName(String restaurantName);
-    boolean existsByUserId(String userId);
+    boolean existsByAuth0Id(String auth0Id);
     Optional<Restaurant> findById(String _id);
+    Optional<Restaurant> findByUser(String user);
+    Optional<Restaurant> findByAuth0Id(String auth0Id);
+
 
 }

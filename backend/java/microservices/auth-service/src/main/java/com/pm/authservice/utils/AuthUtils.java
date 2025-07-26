@@ -1,5 +1,8 @@
 package com.pm.authservice.utils;
 
+import com.pm.authservice.exception.UserNotFoundException;
+import com.pm.authservice.model.User;
+import com.pm.authservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -28,6 +31,12 @@ public class AuthUtils {
             return authId;
         }
         return null;
+    }
+
+    public static String getUserId(UserRepository userRepository){
+        User user = userRepository.findByAuth0Id(getAuth0Id()).orElseThrow(
+                () -> new UserNotFoundException("Restaurant not found"));
+        return user.getId();
     }
 
     public static String getAuth0Id() {

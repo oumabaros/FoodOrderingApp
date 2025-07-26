@@ -22,6 +22,12 @@ public class MyUserController {
         this.userService = userService;
     }
 
+    @GetMapping("userid")
+    @Operation(summary = "Get Current User Id")
+    public String getUserId(Authentication authentication) {
+
+        return userService.getUserId(authentication);
+    }
     @GetMapping
     @Operation(summary = "Get Current User")
     public ResponseEntity<CreateUserResponseDTO> getUser(Authentication authentication) {

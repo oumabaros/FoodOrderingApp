@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 
-@Document
+@Document(collection = "restaurants")
 public class Restaurant {
   @NotNull
-  private String userId;
+  private String user;
   @NotNull
   private String restaurantName;
   @NotNull
@@ -25,6 +25,16 @@ public class Restaurant {
   private MenuItem[] menuItems;
   @NotNull
   private String[] cuisines;
+  @NotNull
+  private String auth0Id;
+
+  public String getAuth0Id() {
+    return auth0Id;
+  }
+
+  public void setAuth0Id(String auth0Id) {
+    this.auth0Id = auth0Id;
+  }
 
   public MenuItem[] getMenuItems() {
     return menuItems;
@@ -98,11 +108,11 @@ public class Restaurant {
     this.lastUpdated = lastUpdated;
   }
 
-  public String getUserId() {
-    return userId;
+  public String getUser() {
+    return user;
   }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public void setUser(String user) {
+    this.user = user;
   }
 }

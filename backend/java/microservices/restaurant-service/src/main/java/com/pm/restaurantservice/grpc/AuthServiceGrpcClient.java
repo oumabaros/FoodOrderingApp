@@ -32,7 +32,7 @@ public class AuthServiceGrpcClient {
         AuthRequest request = AuthRequest.newBuilder().build();
 
         AuthResponse response = blockingStub.getAuth0Id(request);
-        log.info("Received response from billing service via GRPC: {}", response);
+        log.info("Received response from auth service via GRPC: {}", response);
         return response.getAuthId();
     }
 }

@@ -84,7 +84,13 @@ public class RestaurantResponseDTO {
     public void setMenuItems(MenuItem[] menuItems) {
         this.menuItems = menuItems;
     }
+    public String getAuth0Id() {
+        return auth0Id;
+    }
 
+    public void setAuth0Id(String auth0Id) {
+        this.auth0Id = auth0Id;
+    }
     private String restaurantName;
 
     private String city;
@@ -101,5 +107,7 @@ public class RestaurantResponseDTO {
 
     private String[] cuisines;
     private String userId;
+
+    private String auth0Id;
     private MenuItem[] menuItems;
 }

@@ -30,6 +30,7 @@ const createMyRestaurant = async (
     const imageUrl = await uploadImage(req.file as Express.Multer.File);
 
     const restaurant = new Restaurant(req.body);
+    restaurant.auth0Id = req.auth0Id;
     restaurant.imageUrl = imageUrl;
     restaurant.user = new mongoose.Types.ObjectId(req.userId);
     restaurant.lastUpdated = new Date();

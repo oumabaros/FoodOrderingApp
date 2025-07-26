@@ -14,6 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -23,6 +25,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,9 +39,15 @@ public class RestaurantService {
     this.cloudinary=cloudinary;
   }
 
-  public List<RestaurantResponseDTO> getRestaurants() {
-    List<Restaurant> restaurants = restaurantRepository.findAll();
-    return restaurants.stream().map(RestaurantMapper::toDTO).toList();
+  public RestaurantResponseDTO getRestaurantByUser(Authentication authentication) {
+    //RestTemplate restTemplate = new RestTemplate();
+    //String url = "http://auth-service:4005/my/user/userid"; // URL of the target microservice
+    //String response = restTemplate.getForObject(url, String.class);
+    //System.out.println("USER ID: "+response);
+    Restaurant restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication)).orElseThrow(
+            () -> new RestaurantNotFoundException("Restaurant not found"));
+    return RestaurantMapper.toDTO(restaurant);
+
   }
 
   public static String getAuth0Id(Authentication authentication) {
@@ -54,8 +63,9 @@ public class RestaurantService {
       return null;
     }
   }
-  public RestaurantResponseDTO createRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO) {
-    if(restaurantRepository.existsByUserId(restaurantRequestDTO.getUserId())){
+  public RestaurantResponseDTO createRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
+                                                Authentication authentication) {
+    if(restaurantRepository.existsByAuth0Id(getAuth0Id(authentication))){
       return RestaurantMapper.toDTO(null);
     }
     else{

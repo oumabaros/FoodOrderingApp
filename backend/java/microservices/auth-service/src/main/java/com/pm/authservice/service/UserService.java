@@ -1,9 +1,9 @@
 package com.pm.authservice.service;
 
-import com.pm.authservice.dto.UserReqDTO;
-import com.pm.authservice.dto.UserRequestDTO;
-import com.pm.authservice.dto.UserResDTO;
-import com.pm.authservice.dto.UserResponseDTO;
+import com.pm.authservice.dto.UpdateUserRequestDTO;
+import com.pm.authservice.dto.CreateUserRequestDTO;
+import com.pm.authservice.dto.UpdateUserResponseDTO;
+import com.pm.authservice.dto.CreateUserResponseDTO;
 import com.pm.authservice.exception.UserNotFoundException;
 import com.pm.authservice.kafka.KafkaProducer;
 import com.pm.authservice.mapper.UserMapper;
@@ -26,7 +26,7 @@ public class UserService {
     this.kafkaProducer = kafkaProducer;
   }
 
-  public UserResponseDTO getUser(Authentication authentication) {
+  public CreateUserResponseDTO getUser(Authentication authentication) {
     String auth0Id=getAuthId(authentication);
     if (auth0Id==null) {
       return null;
@@ -38,37 +38,36 @@ public class UserService {
 
     return UserMapper.toDTO(user);
   }
-  public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-    if (userRepository.existsByAuth0Id(userRequestDTO.getAuth0Id())) {
+  public CreateUserResponseDTO createUser(CreateUserRequestDTO createUserRequestDTO,
+                                    Authentication authentication) {
+    if (userRepository.existsByAuth0Id(getAuthId(authentication))) {
       return null;
     }
 
-    User newUser = userRepository.save(UserMapper.toModel(userRequestDTO));
+    User newUser = userRepository.save(UserMapper.toModel(createUserRequestDTO));
     kafkaProducer.sendEvent(newUser);
 
     return UserMapper.toDTO(newUser);
   }
 
-  public UserResDTO updateUser(Authentication authentication,
-                               UserReqDTO userRequestDTO) {
-    String auth0Id=getAuthId(authentication);
-    if(auth0Id!=null){
-      User user = userRepository.findByAuth0Id(auth0Id).orElseThrow(
-              () -> new UserNotFoundException("User not found with Auth0Id: " + auth0Id));
+  public UpdateUserResponseDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO) {
 
-      user.setName(userRequestDTO.getName());
-      user.setAddressLine1(userRequestDTO.getAddressLine1());
-      user.setCountry(userRequestDTO.getCountry());
-      user.setCity(userRequestDTO.getCity());
 
-      User updatedUser = userRepository.save(user);
-      return UserMpa.toDTO(updatedUser);
-    }
-    else{
-      return null;
-    }
+      User user = userRepository.findByEmail(updateUserRequestDTO.getEmail()).orElseThrow(
+              () -> new UserNotFoundException("User not found with email: " + updateUserRequestDTO.getEmail()));
+      if(user!=null){
+        user.setName(updateUserRequestDTO.getName());
+        user.setAddressLine1(updateUserRequestDTO.getAddressLine1());
+        user.setCountry(updateUserRequestDTO.getCountry());
+        user.setCity(updateUserRequestDTO.getCity());
 
-  }
+        User updatedUser = userRepository.save(user);
+        return UserMpa.toDTO(updatedUser);
+      }
+      else{
+        return null;
+      }
+}
 
   public String getAuthId(Authentication authentication) {
     String authId = null;

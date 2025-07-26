@@ -1,12 +1,12 @@
 package com.pm.authservice.mapper;
 
-import com.pm.authservice.dto.UserReqDTO;
-import com.pm.authservice.dto.UserResDTO;
+import com.pm.authservice.dto.UpdateUserRequestDTO;
+import com.pm.authservice.dto.UpdateUserResponseDTO;
 import com.pm.authservice.model.User;
 
 public class UserMpa {
-    public static UserResDTO toDTO(User user) {
-        UserResDTO userDTO = new UserResDTO();
+    public static UpdateUserResponseDTO toDTO(User user) {
+        UpdateUserResponseDTO userDTO = new UpdateUserResponseDTO();
         userDTO.setName(user.getName());
         userDTO.setAddressLine1(user.getAddressLine1());
         userDTO.setEmail(user.getEmail());
@@ -15,13 +15,13 @@ public class UserMpa {
         return userDTO;
     }
 
-    public static User toModel(UserReqDTO userRequestDTO) {
+    public static User toModel(UpdateUserRequestDTO createUserRequestDTO) {
         User user = new User();
-        user.setName(userRequestDTO.getName());
-        user.setAddressLine1(userRequestDTO.getAddressLine1());
-        user.setEmail(userRequestDTO.getEmail());
-        user.setCity(userRequestDTO.getCity());
-        user.setCountry(userRequestDTO.getCountry());
+        user.setName(createUserRequestDTO.getName());
+        user.setAddressLine1(createUserRequestDTO.getAddressLine1());
+        user.setEmail(createUserRequestDTO.getEmail());
+        user.setCity(createUserRequestDTO.getCity());
+        user.setCountry(createUserRequestDTO.getCountry());
         return user;
     }
 }

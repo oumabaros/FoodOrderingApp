@@ -1,12 +1,12 @@
 package com.pm.authservice.dto;
 
-public class UserResDTO {
+public class CreateUserResponseDTO {
+    private String auth0Id;
     private String name;
     private String email;
     private String addressLine1;
     private String city;
     private String country;
-
     public String getName() {
         return name;
     }
@@ -29,6 +29,14 @@ public class UserResDTO {
 
     public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
+    }
+
+    public String getAuth0Id() {
+        return auth0Id;
+    }
+
+    public void setAuth0Id(String auth0Id) {
+        this.auth0Id = auth0Id;
     }
 
     public String getCity() {

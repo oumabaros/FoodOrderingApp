@@ -71,6 +71,7 @@ export const useCreateMyUser = () => {
 };
 
 type UpdateMyUserRequest = {
+  auth0Id: string;
   name: string;
   addressLine1: string;
   city: string;

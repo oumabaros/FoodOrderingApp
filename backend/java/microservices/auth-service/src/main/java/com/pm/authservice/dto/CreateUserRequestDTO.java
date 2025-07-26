@@ -4,19 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.UUID;
-
-public class UserRequestDTO {
+public class CreateUserRequestDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
     @NotBlank(message = "Auth0Id is required")
     private String auth0Id;
-
     @Size(max = 100, message = "Name cannot exceed 100 characters")
     private String name;
-
-    private UUID id;
     private String addressLine1;
 
     private String city;
@@ -42,9 +37,6 @@ public class UserRequestDTO {
         this.email = email;
     }
 
-    public UUID getId(){
-        return id;
-    }
     public @NotBlank(message = "Auth0Id is required") String getAuth0Id() {
         return auth0Id;
     }

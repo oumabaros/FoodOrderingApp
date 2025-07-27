@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepository extends MongoRepository<Restaurant, String> {
     boolean existsByAuth0Id(String auth0Id);
-    Optional<Restaurant> findById(String _id);
     Optional<Restaurant> findByUser(String user);
     Optional<Restaurant> findByAuth0Id(String auth0Id);
 

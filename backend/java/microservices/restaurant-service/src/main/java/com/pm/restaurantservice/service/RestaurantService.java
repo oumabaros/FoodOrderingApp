@@ -39,14 +39,9 @@ public class RestaurantService {
     this.cloudinary=cloudinary;
   }
 
-  public RestaurantResponseDTO getRestaurantByUser(Authentication authentication) {
-    //RestTemplate restTemplate = new RestTemplate();
-    //String url = "http://auth-service:4005/my/user/userid"; // URL of the target microservice
-    //String response = restTemplate.getForObject(url, String.class);
-    //System.out.println("USER ID: "+response);
-    Restaurant restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication)).orElseThrow(
-            () -> new RestaurantNotFoundException("Restaurant not found"));
-    return RestaurantMapper.toDTO(restaurant);
+  public Optional<RestaurantResponseDTO> getRestaurantByUser(Authentication authentication) {
+    Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
+    return RestaurantMapper.toOptionalDTO(restaurant);
 
   }
 
@@ -63,12 +58,13 @@ public class RestaurantService {
       return null;
     }
   }
-  public RestaurantResponseDTO createRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
+  public Optional<RestaurantResponseDTO> createRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
                                                 Authentication authentication) {
-    if(restaurantRepository.existsByAuth0Id(getAuth0Id(authentication))){
-      return RestaurantMapper.toDTO(null);
+    Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
+    if(restaurant.isPresent()){
+      return RestaurantMapper.toOptionalDTO(restaurant);
     }
-    else{
+    else {
       try {
         MultipartFile imageFile = (MultipartFile) restaurantRequestDTO.getImageFile();
         File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
@@ -81,34 +77,46 @@ public class RestaurantService {
         restaurantRequestDTO.setImageUrl(pic.get("url").toString());
         LocalDate lt = LocalDate.now();
         restaurantRequestDTO.setLastUpdated(lt);
-        Restaurant newRestaurant=restaurantRepository.save(
-                RestaurantMapper.toModel(restaurantRequestDTO));
-        return RestaurantMapper.toDTO(newRestaurant);
 
+        return restaurant.map(res -> {
+//          res.setMenuItems(restaurantRequestDTO.getMenuItems());
+//          res.setRestaurantName(restaurantRequestDTO.getRestaurantName());
+//          res.setCity(restaurantRequestDTO.getCity());
+//          res.setAuth0Id(restaurantRequestDTO.getAuth0Id());
+//          res.setUser(restaurantRequestDTO.getUserId());
+//          res.setCountry(restaurantRequestDTO.getCountry());
+//          res.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
+//          res.setImageUrl(pic.get("url").toString());
+//          res.setLastUpdated(lt);
+          Restaurant newRestaurant = restaurantRepository.save(RestaurantMapper.toModel(restaurantRequestDTO));
+          return RestaurantMapper.toDTO(newRestaurant);
+        });
       } catch (IOException e) {
         throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to upload the file.");
       }
     }
+
+
   }
 
-  public RestaurantResponseDTO updateRestaurant(String _id,
-      RestaurantRequestDTO restaurantRequestDTO) {
+  public Optional<RestaurantResponseDTO> updateRestaurant(RestaurantRequestDTO restaurantRequestDTO,
+                                                          Authentication authentication) {
 
-    Restaurant restaurant = restaurantRepository.findById(_id).orElseThrow(
-        () -> new RestaurantNotFoundException("Restaurant not found"));
+    Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
 
-    restaurant.setRestaurantName(restaurantRequestDTO.getRestaurantName());
-    restaurant.setCity(restaurantRequestDTO.getCity());
-    restaurant.setCountry(restaurantRequestDTO.getCountry());
-    restaurant.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
-    restaurant.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
-    restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
-    restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
-    restaurant.setCuisines(restaurantRequestDTO.getCuisines());
-    restaurant.setMenuItems(restaurantRequestDTO.getMenuItems());
-
-    Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
-    return RestaurantMapper.toDTO(updatedRestaurant);
+    return restaurant.map(res->{
+      res.setRestaurantName(restaurantRequestDTO.getRestaurantName());
+      res.setCity(restaurantRequestDTO.getCity());
+      res.setCountry(restaurantRequestDTO.getCountry());
+      res.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
+      res.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
+      res.setImageUrl(restaurantRequestDTO.getImageUrl());
+      res.setLastUpdated(restaurantRequestDTO.getLastUpdated());
+      res.setCuisines(restaurantRequestDTO.getCuisines());
+      res.setMenuItems(restaurantRequestDTO.getMenuItems());
+      Restaurant updatedRestaurant = restaurantRepository.save(res);
+      return RestaurantMapper.toDTO(updatedRestaurant);
+    });
   }
 
 }

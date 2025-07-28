@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -48,7 +49,7 @@ public class RestaurantController {
 
     }
 
-    @PostMapping
+    @PostMapping(consumes = "multipart/form-data")
     @Operation(summary = "Create a new Restaurant")
     public ResponseEntity<RestaurantResponseDTO> createRestaurant(
             @ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
@@ -63,12 +64,12 @@ public class RestaurantController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping()
+    @PutMapping(consumes = "multipart/form-data")
     @Operation(summary = "Update a new Restaurant")
-    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@RequestBody RestaurantRequestDTO restaurantRequestDTO,
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
                                                                   Authentication authentication) {
 
-        Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.updateRestaurant(restaurantRequestDTO, authentication);
+        Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.updateRestaurant(restaurantRequestDTO,authentication);
 
         if (restaurantResponseDTO.isPresent()) {
             RestaurantResponseDTO rest = restaurantResponseDTO.get();

@@ -17,11 +17,9 @@ public class User {
     private String addressLine1;
     private String city;
     private String country;
-
     public String getId() {
         return id;
     }
-
     public String getAuth0Id() {
         return auth0Id;
     }

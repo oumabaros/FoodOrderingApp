@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public class RestaurantRequestDTO {
@@ -28,7 +31,8 @@ public class RestaurantRequestDTO {
     private File imageFile;
     @NotBlank
     private String[] cuisines;
-    private MenuItem[] menuItems;
+    @NotBlank
+    private List<MenuItem> menuItems;
     @NotBlank
     private String userId;
     private String auth0Id;
@@ -122,11 +126,11 @@ public class RestaurantRequestDTO {
         this.cuisines = cuisines;
     }
 
-    public MenuItem[] getMenuItems() {
+    public List<MenuItem> getMenuItems() {
         return menuItems;
     }
 
-    public void setMenuItems(MenuItem[] menuItems) {
+    public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
 }

@@ -33,12 +33,6 @@ public class AuthUtils {
         return null;
     }
 
-    public static String getUserId(UserRepository userRepository){
-        User user = userRepository.findByAuth0Id(getAuth0Id()).orElseThrow(
-                () -> new UserNotFoundException("Restaurant not found"));
-        return user.getId();
-    }
-
     public static String getAuth0Id() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof OAuth2AuthenticationToken token && token.getPrincipal() instanceof DefaultOidcUser user) {

@@ -3,6 +3,9 @@ package com.pm.restaurantservice.dto;
 import com.pm.restaurantservice.model.MenuItem;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class RestaurantResponseDTO {
     public void setUserId(String userId) {
@@ -77,13 +80,14 @@ public class RestaurantResponseDTO {
         this.cuisines = cuisines;
     }
 
-    public MenuItem[] getMenuItems() {
+    public List<MenuItem> getMenuItems() {
         return menuItems;
     }
 
-    public void setMenuItems(MenuItem[] menuItems) {
+    public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
     }
+
     public String getAuth0Id() {
         return auth0Id;
     }
@@ -109,5 +113,5 @@ public class RestaurantResponseDTO {
     private String userId;
 
     private String auth0Id;
-    private MenuItem[] menuItems;
+    private List<MenuItem> menuItems;
 }

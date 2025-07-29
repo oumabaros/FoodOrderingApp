@@ -3,6 +3,8 @@ package com.pm.restaurantservice.dto;
 import com.pm.restaurantservice.model.MenuItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,15 +30,32 @@ public class RestaurantRequestDTO {
     private LocalDate lastUpdated;
     private String imageUrl;
     @NotBlank(message = "Image is required")
-    private File imageFile;
+    private MultipartFile imageFile;
     @NotBlank
-    private String[] cuisines;
+    private List<String> cuisines;
     @NotBlank
     private List<MenuItem> menuItems;
     @NotBlank
     private String userId;
     private String auth0Id;
 
+    public RestaurantRequestDTO(String restaurantName,
+                                String city,
+                                String country,
+                                Double deliveryPrice,
+                                Integer estimatedDeliveryTime,
+                                List<MenuItem> menuItems,
+                                List<String> cuisines,
+                                MultipartFile imageFile){
+        this.restaurantName=restaurantName;
+        this.city=city;
+        this.country=country;
+        this.deliveryPrice=deliveryPrice;
+        this.estimatedDeliveryTime=estimatedDeliveryTime;
+        this.menuItems=menuItems;
+        this.cuisines=cuisines;
+        this.imageFile=imageFile;
+    }
     public String getAuth0Id() {
         return auth0Id;
     }
@@ -53,11 +72,11 @@ public class RestaurantRequestDTO {
         this.imageUrl = imageUrl;
     }
 
-    public File getImageFile() {
+    public MultipartFile getImageFile() {
         return imageFile;
     }
 
-    public void setImageFile(File imageFile) {
+    public void setImageFile(MultipartFile imageFile) {
         this.imageFile = imageFile;
     }
 
@@ -110,8 +129,12 @@ public class RestaurantRequestDTO {
         this.lastUpdated = lastUpdated;
     }
 
-    public String[] getCuisines() {
+    public List<String> getCuisines() {
         return cuisines;
+    }
+
+    public void setCuisines(List<String> cuisines) {
+        this.cuisines = cuisines;
     }
 
     public String getUserId() {
@@ -120,10 +143,6 @@ public class RestaurantRequestDTO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public void setCuisines(String[] cuisines) {
-        this.cuisines = cuisines;
     }
 
     public List<MenuItem> getMenuItems() {

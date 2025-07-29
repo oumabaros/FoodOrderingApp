@@ -2,10 +2,8 @@ package com.pm.restaurantservice.model;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "restaurants")
@@ -28,10 +26,9 @@ public class Restaurant {
   private String imageUrl;
   @NotNull
   private LocalDate lastUpdated;
-  @DBRef
   private List<MenuItem>  menuItems;
   @NotNull
-  private String[] cuisines;
+  private List <String> cuisines;
   @NotNull
   private String auth0Id;
   public String getId() {
@@ -53,11 +50,11 @@ public class Restaurant {
     this.menuItems = menuItems;
   }
 
-  public String[] getCuisines() {
+  public List<String> getCuisines() {
     return cuisines;
   }
 
-  public void setCuisines(String[] cuisines) {
+  public void setCuisines(List<String> cuisines) {
     this.cuisines = cuisines;
   }
 

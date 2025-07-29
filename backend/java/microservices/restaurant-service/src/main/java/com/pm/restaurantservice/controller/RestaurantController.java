@@ -3,16 +3,20 @@ package com.pm.restaurantservice.controller;
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.service.RestaurantService;
+import com.pm.restaurantservice.utils.RestaurantRequestParser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.multipart.MultipartFile;
+
+
 
 
 @RestController
@@ -52,29 +56,44 @@ public class RestaurantController {
     @PostMapping(consumes = "multipart/form-data")
     @Operation(summary = "Create a new Restaurant")
     public ResponseEntity<RestaurantResponseDTO> createRestaurant(
-            @ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
+            HttpServletRequest request,
             Authentication authentication) {
-
-        Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.createRestaurant(
-                restaurantRequestDTO, authentication);
-        if (restaurantResponseDTO.isPresent()) {
-            RestaurantResponseDTO rest = restaurantResponseDTO.get();
-            return new ResponseEntity<>(rest, HttpStatus.OK);
+        try {
+            RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequest(request);
+            Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.createRestaurant(
+                    reqDTO, authentication);
+            if (restaurantResponseDTO.isPresent()) {
+                RestaurantResponseDTO rest = restaurantResponseDTO.get();
+                return new ResponseEntity<>(rest, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(consumes = "multipart/form-data")
     @Operation(summary = "Update a new Restaurant")
-    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@ModelAttribute RestaurantRequestDTO restaurantRequestDTO,
-                                                                  Authentication authentication) {
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(
+            HttpServletRequest request,
+            Authentication authentication) {
 
-        Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.updateRestaurant(restaurantRequestDTO,authentication);
-
-        if (restaurantResponseDTO.isPresent()) {
-            RestaurantResponseDTO rest = restaurantResponseDTO.get();
-            return new ResponseEntity<>(rest, HttpStatus.OK);
+        try {
+            RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequest(request);
+            System.out.println("DTO UPDATE: "+reqDTO);
+            Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.createRestaurant(
+                    reqDTO, authentication);
+            if (restaurantResponseDTO.isPresent()) {
+                RestaurantResponseDTO rest = restaurantResponseDTO.get();
+                return new ResponseEntity<>(rest, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

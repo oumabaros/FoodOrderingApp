@@ -1,20 +1,19 @@
 package com.pm.restaurantservice.model;
 
 import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "menuItems")
 public class MenuItem {
-    @Id
-    private String id;
 
     @NotNull
     public String name;
     @NotNull
     public Double price;
-    public String getId() {
-        return id;
+
+    public MenuItem(String name,Double price){
+        this.name=name;
+        this.price=price;
     }
     public String getName() {
         return name;

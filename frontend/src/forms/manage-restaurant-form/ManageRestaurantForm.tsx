@@ -97,11 +97,24 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
 
   const onSubmit = (formDataJson: RestaurantFormData) => {
     const formData = new FormData();
+    // const data = {
+    //   restaurantName: formDataJson.restaurantName,
+    //   city: formDataJson.city,
+    //   country: formDataJson.country,
+    //   deliveryPrice: formDataJson.deliveryPrice * 100, // Convert to lowest denomination
+    //   estimatedDeliveryTime: formDataJson.estimatedDeliveryTime,
+    //   cuisines: formDataJson.cuisines,
+    //   menuItems: formDataJson.menuItems.map((item) => ({
+    //     name: item.name,
+    //     price: item.price * 100, // Convert to lowest denomination
+    //   })),
+    // };
+    // formData.append("restaurantRequestDTO", JSON.stringify(data));
+    // formData.append("imageFile", formDataJson.imageFile || "");
 
     formData.append("restaurantName", formDataJson.restaurantName);
     formData.append("city", formDataJson.city);
     formData.append("country", formDataJson.country);
-
     formData.append(
       "deliveryPrice",
       (formDataJson.deliveryPrice * 100).toString()
@@ -110,6 +123,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
       "estimatedDeliveryTime",
       formDataJson.estimatedDeliveryTime.toString()
     );
+
     formDataJson.cuisines.forEach((cuisine, index) => {
       formData.append(`cuisines[${index}]`, cuisine);
     });
@@ -131,6 +145,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 bg-gray-50 p-10 rounded-lg"
+        encType="multipart/form-data"
       >
         <DetailsSection />
         <Separator />

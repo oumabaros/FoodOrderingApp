@@ -5,7 +5,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.mapper.RestaurantMapper;
-import com.pm.restaurantservice.model.MenuItem;
 import com.pm.restaurantservice.model.Restaurant;
 import com.pm.restaurantservice.repository.RestaurantRepository;
 
@@ -13,7 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -60,10 +58,12 @@ public class RestaurantService {
                                                             Authentication authentication) {
         Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
         if (restaurant.isPresent()) {
+            System.out.println("RESTAURANT IS PRESENT. PROCEED UPDATE");
             return RestaurantMapper.toOptionalDTO(restaurant);
         } else {
+            System.out.println("RESTAURANT IS NOT PRESENT. PROCEED SAVE");
             try {
-                MultipartFile imageFile = (MultipartFile) restaurantRequestDTO.getImageFile();
+                MultipartFile imageFile = restaurantRequestDTO.getImageFile();
                 File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
                 FileOutputStream fos = new FileOutputStream(convFile);
                 fos.write(imageFile.getBytes());
@@ -74,20 +74,10 @@ public class RestaurantService {
                 restaurantRequestDTO.setImageUrl(pic.get("url").toString());
                 LocalDate lt = LocalDate.now();
                 restaurantRequestDTO.setLastUpdated(lt);
+                System.out.println("IMAGE URL: "+restaurantRequestDTO.getImageUrl());
+                Restaurant newRestaurant=restaurantRepository.save(RestaurantMapper.toModel(restaurantRequestDTO));
 
-                return restaurant.map(res -> {
-//          res.setMenuItems(restaurantRequestDTO.getMenuItems());
-//          res.setRestaurantName(restaurantRequestDTO.getRestaurantName());
-//          res.setCity(restaurantRequestDTO.getCity());
-//          res.setAuth0Id(restaurantRequestDTO.getAuth0Id());
-//          res.setUser(restaurantRequestDTO.getUserId());
-//          res.setCountry(restaurantRequestDTO.getCountry());
-//          res.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
-//          res.setImageUrl(pic.get("url").toString());
-//          res.setLastUpdated(lt);
-                    Restaurant newRestaurant = restaurantRepository.save(RestaurantMapper.toModel(restaurantRequestDTO));
-                    return RestaurantMapper.toDTO(newRestaurant);
-                });
+                return Optional.of(RestaurantMapper.toDTO(newRestaurant));
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to upload the file.");
             }
@@ -101,7 +91,7 @@ public class RestaurantService {
         Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
         if (restaurant.isPresent()) {
             try {
-                MultipartFile imageFile = (MultipartFile) restaurantRequestDTO.getImageFile();
+                MultipartFile imageFile = restaurantRequestDTO.getImageFile();
                 File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
                 FileOutputStream fos = new FileOutputStream(convFile);
                 fos.write(imageFile.getBytes());
@@ -122,7 +112,7 @@ public class RestaurantService {
                     res.setImageUrl(restaurantRequestDTO.getImageUrl());
                     res.setLastUpdated(restaurantRequestDTO.getLastUpdated());
                     res.setCuisines(restaurantRequestDTO.getCuisines());
-                    res.setMenuItems((List<MenuItem>) restaurantRequestDTO.getMenuItems());
+                    res.setMenuItems(restaurantRequestDTO.getMenuItems());
                     Restaurant updatedRestaurant = restaurantRepository.save(res);
                     return RestaurantMapper.toDTO(updatedRestaurant);
                 });

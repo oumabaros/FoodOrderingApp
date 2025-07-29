@@ -72,11 +72,11 @@ public class RestaurantResponseDTO {
         this.lastUpdated = lastUpdated;
     }
 
-    public String[] getCuisines() {
+    public List<String> getCuisines() {
         return cuisines;
     }
 
-    public void setCuisines(String[] cuisines) {
+    public void setCuisines(List<String> cuisines) {
         this.cuisines = cuisines;
     }
 
@@ -109,7 +109,7 @@ public class RestaurantResponseDTO {
 
     private LocalDate lastUpdated;
 
-    private String[] cuisines;
+    private List<String> cuisines;
     private String userId;
 
     private String auth0Id;

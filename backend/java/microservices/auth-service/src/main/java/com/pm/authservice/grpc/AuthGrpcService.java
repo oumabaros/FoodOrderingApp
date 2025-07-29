@@ -15,12 +15,13 @@ public class AuthGrpcService extends AuthServiceImplBase {
             AuthGrpcService.class);
 
     @Override
-    public void getAuth0Id(AuthRequest authRequest,
-                           StreamObserver<AuthResponse> responseObserver){
-        log.info("GetAuth0Id request received.");
+    public void getUserDetails(AuthRequest authRequest,
+                          StreamObserver<AuthResponse> responseObserver){
+        log.info("GetUserId request received.");
         AuthResponse authResponse=AuthResponse.newBuilder()
-                .setAuthId(AuthUtils.getAuth0Id())
                 .setEmail(AuthUtils.getUserEmail())
+                .setUserId(AuthUtils.getUserId())
+                .setAuthId(AuthUtils.getAuth0Id())
                 .build();
         responseObserver.onNext(authResponse);
         responseObserver.onCompleted();

@@ -31,6 +31,14 @@ public class MyUserController {
         }
         return ResponseEntity.ok().body(createUserResponseDTO);
     }
+
+    @GetMapping("/{authid}")
+    @Operation(summary = "Get Current User")
+    public String getUserByAuth0Id(@PathVariable String authid) {
+        String userId = userService.getUserId(authid);
+
+        return userId;
+    }
     @PostMapping
     @Operation(summary = "Create a new user.")
     public ResponseEntity<CreateUserResponseDTO> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO,

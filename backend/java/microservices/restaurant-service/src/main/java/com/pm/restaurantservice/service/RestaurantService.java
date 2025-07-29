@@ -4,6 +4,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
+import com.pm.restaurantservice.grpc.AuthServiceGrpcClient;
+import com.pm.restaurantservice.grpc.BillingServiceGrpcClient;
 import com.pm.restaurantservice.mapper.RestaurantMapper;
 import com.pm.restaurantservice.model.Restaurant;
 import com.pm.restaurantservice.repository.RestaurantRepository;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.pm.restaurantservice.utils.Utilities;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -28,19 +31,27 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
+    private final AuthServiceGrpcClient authServiceGrpcClient;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
     private final Cloudinary cloudinary;
 
+
     public RestaurantService(RestaurantRepository restaurantRepository,
+                             AuthServiceGrpcClient authServiceGrpcClient,
+                             BillingServiceGrpcClient billingServiceGrpcClient,
                              Cloudinary cloudinary) {
         this.restaurantRepository = restaurantRepository;
         this.cloudinary = cloudinary;
+        this.authServiceGrpcClient=authServiceGrpcClient;
+        this.billingServiceGrpcClient=billingServiceGrpcClient;
+
     }
 
     public Optional<RestaurantResponseDTO> getRestaurantByUser(Authentication authentication) {
         Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
-        return RestaurantMapper.toOptionalDTO(restaurant);
 
-    }
+        return RestaurantMapper.toOptionalDTO(restaurant);
+   }
 
     public static String getAuth0Id(Authentication authentication) {
         if (authentication instanceof OAuth2AuthenticationToken token && token.getPrincipal() instanceof DefaultOidcUser user) {
@@ -58,10 +69,8 @@ public class RestaurantService {
                                                             Authentication authentication) {
         Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
         if (restaurant.isPresent()) {
-            System.out.println("RESTAURANT IS PRESENT. PROCEED UPDATE");
             return RestaurantMapper.toOptionalDTO(restaurant);
         } else {
-            System.out.println("RESTAURANT IS NOT PRESENT. PROCEED SAVE");
             try {
                 MultipartFile imageFile = restaurantRequestDTO.getImageFile();
                 File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
@@ -71,12 +80,19 @@ public class RestaurantService {
 
                 var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
 
+                //authServiceGrpcClient.getUserId();
+                //authServiceGrpcClient.getAuth0Id();
+
                 restaurantRequestDTO.setImageUrl(pic.get("url").toString());
                 LocalDate lt = LocalDate.now();
                 restaurantRequestDTO.setLastUpdated(lt);
                 System.out.println("IMAGE URL: "+restaurantRequestDTO.getImageUrl());
+                System.out.println("USER ID: "+ Utilities.getUserId(getAuth0Id(authentication)));
+
                 Restaurant newRestaurant=restaurantRepository.save(RestaurantMapper.toModel(restaurantRequestDTO));
 
+                billingServiceGrpcClient.createBillingAccount(newRestaurant.getId(),
+                        newRestaurant.getRestaurantName(), newRestaurant.getCountry());
                 return Optional.of(RestaurantMapper.toDTO(newRestaurant));
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to upload the file.");

@@ -32,9 +32,16 @@ public class UserService {
       return null;
     }
     User user = userRepository.findByAuth0Id(auth0Id).orElseThrow(
-            () -> new UserNotFoundException("User not found with Auth0Id: " + auth0Id));
+            () -> new UserNotFoundException("User not found."));
 
     return UserMapper.toDTO(user);
+  }
+  public String getUserId(String authId) {
+
+    User user = userRepository.findByAuth0Id(authId).orElseThrow(
+            () -> new UserNotFoundException("User not found."));
+
+    return user.getId();
   }
   public CreateUserResponseDTO createUser(CreateUserRequestDTO createUserRequestDTO,
                                     Authentication authentication) {
@@ -72,8 +79,6 @@ public class UserService {
     if(authentication.isAuthenticated()){
       authId = AuthUtils.getAuthId(authentication);
     }
-
     return authId;
   }
-
 }

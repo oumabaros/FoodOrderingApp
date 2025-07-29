@@ -50,18 +50,6 @@ public class HomeController {
         return authentication.getCredentials();
     }
 
-    @RequestMapping(value="/my/user/auth-id",method = RequestMethod.GET)
-    public String getAuthId(Authentication authentication) {
-        String authId;
-        if(AuthUtils.getAuthId(authentication)!=null){
-            authId = AuthUtils.getAuthId(authentication);
-        }
-        else{
-            return null;
-        }
-        return authId;
-    }
-
     @RequestMapping(value="/my/user/auth-token",method = RequestMethod.GET)
     public String getAuthToken(Authentication authentication) {
         String authToken;

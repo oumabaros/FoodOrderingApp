@@ -1,6 +1,8 @@
 package com.pm.authservice.utils;
 
+import com.pm.authservice.dto.CreateUserResponseDTO;
 import com.pm.authservice.exception.UserNotFoundException;
+import com.pm.authservice.mapper.UserMapper;
 import com.pm.authservice.model.User;
 import com.pm.authservice.repository.UserRepository;
 import org.slf4j.Logger;
@@ -13,9 +15,22 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+import java.util.Optional;
+
 public class AuthUtils {
     private static final Logger log = LoggerFactory.getLogger(
             AuthUtils.class);
+    private static UserRepository userRepository;
+    public AuthUtils(UserRepository userRepository){
+        this.userRepository=userRepository;
+    }
+
+    public static String getUserId(){
+        User user = userRepository.findByAuth0Id(getAuth0Id()).orElseThrow(
+                () -> new UserNotFoundException("User not found. "));
+
+        return user.getId();
+    }
     public static String getJwt(Authentication authentication){
         if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
 

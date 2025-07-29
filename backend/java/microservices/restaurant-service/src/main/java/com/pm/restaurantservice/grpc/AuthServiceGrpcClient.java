@@ -27,12 +27,20 @@ public class AuthServiceGrpcClient {
 
         blockingStub = AuthServiceGrpc.newBlockingStub(channel);
     }
-    public String getAuth0Id() {
+    public AuthResponse getAuth0Id() {
 
         AuthRequest request = AuthRequest.newBuilder().build();
 
-        AuthResponse response = blockingStub.getAuth0Id(request);
-        log.info("Received response from auth service via GRPC: {}", response);
-        return response.getAuthId();
+        AuthResponse response = blockingStub.getUserDetails(request);
+        log.info("Received Auth0Id Response from auth service via GRPC: {}", response.getAuthId());
+        return response;
+    }
+    public AuthResponse getUserId() {
+
+        AuthRequest request = AuthRequest.newBuilder().build();
+
+        AuthResponse response = blockingStub.getUserDetails(request);
+        log.info("Received UserId Response from auth service via GRPC: {}",response.getUserId());
+        return response;
     }
 }

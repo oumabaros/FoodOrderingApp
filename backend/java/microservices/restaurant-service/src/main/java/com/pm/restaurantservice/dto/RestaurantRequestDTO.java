@@ -4,12 +4,9 @@ import com.pm.restaurantservice.model.MenuItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 
 public class RestaurantRequestDTO {
@@ -29,14 +26,13 @@ public class RestaurantRequestDTO {
     private Integer estimatedDeliveryTime;
     private LocalDate lastUpdated;
     private String imageUrl;
-    @NotBlank(message = "Image is required")
-    private MultipartFile imageFile;
+    Optional<MultipartFile> imageFile;
     @NotBlank
     private List<String> cuisines;
     @NotBlank
     private List<MenuItem> menuItems;
     @NotBlank
-    private String userId;
+    private String user;
     private String auth0Id;
 
     public RestaurantRequestDTO(String restaurantName,
@@ -46,7 +42,7 @@ public class RestaurantRequestDTO {
                                 Integer estimatedDeliveryTime,
                                 List<MenuItem> menuItems,
                                 List<String> cuisines,
-                                MultipartFile imageFile){
+                                Optional<MultipartFile> imageFile){
         this.restaurantName=restaurantName;
         this.city=city;
         this.country=country;
@@ -54,7 +50,7 @@ public class RestaurantRequestDTO {
         this.estimatedDeliveryTime=estimatedDeliveryTime;
         this.menuItems=menuItems;
         this.cuisines=cuisines;
-        this.imageFile=imageFile;
+        this.imageFile= imageFile;
     }
     public String getAuth0Id() {
         return auth0Id;
@@ -72,11 +68,11 @@ public class RestaurantRequestDTO {
         this.imageUrl = imageUrl;
     }
 
-    public MultipartFile getImageFile() {
+    public Optional<MultipartFile> getImageFile() {
         return imageFile;
     }
 
-    public void setImageFile(MultipartFile imageFile) {
+    public void setImageFile(Optional<MultipartFile> imageFile) {
         this.imageFile = imageFile;
     }
 
@@ -137,12 +133,12 @@ public class RestaurantRequestDTO {
         this.cuisines = cuisines;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public List<MenuItem> getMenuItems() {

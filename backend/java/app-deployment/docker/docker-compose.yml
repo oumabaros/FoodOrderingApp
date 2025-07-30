@@ -1,6 +1,5 @@
 services:
   # Backing Services
-
   food-app-service-db:
     image: "mongo:latest"
     container_name: "food-app-service-db"
@@ -34,7 +33,6 @@ services:
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
     networks:
       - internal
-
 
   # Applications
   config-service:
@@ -132,6 +130,8 @@ services:
 volumes:
   mongodb:
   mongoconfig:
+  mongo-ts-db:
+  mongo-ts-config:
 networks:
   internal:
     driver: bridge

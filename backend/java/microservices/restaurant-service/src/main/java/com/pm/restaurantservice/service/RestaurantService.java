@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.pm.restaurantservice.utils.Utilities;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -67,26 +66,27 @@ public class RestaurantService {
 
     public Optional<RestaurantResponseDTO> createRestaurant(RestaurantRequestDTO restaurantRequestDTO,
                                                             Authentication authentication) {
-        Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
+        String userId=authServiceGrpcClient.getUserId(getAuth0Id(authentication)).getUserId();
+        Optional<Restaurant> restaurant = restaurantRepository.findByUser(userId);
         if (restaurant.isPresent()) {
             return RestaurantMapper.toOptionalDTO(restaurant);
         } else {
             try {
-                MultipartFile imageFile = restaurantRequestDTO.getImageFile();
-                File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
-                FileOutputStream fos = new FileOutputStream(convFile);
-                fos.write(imageFile.getBytes());
-                fos.close();
+                if (restaurantRequestDTO.getImageFile()!=null) {
+                    Optional<MultipartFile> imageFile = restaurantRequestDTO.getImageFile();
+                    File convFile = new File(System.getProperty("java.io.tmpdir") + "/" +
+                            imageFile.get().getOriginalFilename());
+                    FileOutputStream fos = new FileOutputStream(convFile);
+                    fos.write(imageFile.get().getBytes());
+                    fos.close();
+                    var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
+                    restaurantRequestDTO.setImageUrl(pic.get("url").toString());
+                }
 
-                var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
-                String userId=authServiceGrpcClient.getUserId(getAuth0Id(authentication)).getUserId();
-                System.out.println("USER ID: "+userId);
-
-                restaurantRequestDTO.setImageUrl(pic.get("url").toString());
+                restaurantRequestDTO.setUser(userId);
+                restaurantRequestDTO.setAuth0Id(getAuth0Id(authentication));
                 LocalDate lt = LocalDate.now();
                 restaurantRequestDTO.setLastUpdated(lt);
-                System.out.println("IMAGE URL: "+restaurantRequestDTO.getImageUrl());
-                //System.out.println("USER ID: "+ Utilities.getUserId(getAuth0Id(authentication)));
 
                 Restaurant newRestaurant=restaurantRepository.save(RestaurantMapper.toModel(restaurantRequestDTO));
 
@@ -95,27 +95,28 @@ public class RestaurantService {
 
                 return Optional.of(RestaurantMapper.toDTO(newRestaurant));
             } catch (IOException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to upload the file.");
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Could not create Restaurant.");
             }
         }
-
-
     }
 
     public Optional<RestaurantResponseDTO> updateRestaurant(RestaurantRequestDTO restaurantRequestDTO,
                                                             Authentication authentication) {
-        Optional<Restaurant> restaurant = restaurantRepository.findByAuth0Id(getAuth0Id(authentication));
+        String userId=authServiceGrpcClient.getUserId(getAuth0Id(authentication)).getUserId();
+        Optional<Restaurant> restaurant = restaurantRepository.findByUser(userId);
         if (restaurant.isPresent()) {
             try {
-                MultipartFile imageFile = restaurantRequestDTO.getImageFile();
-                File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + imageFile.getOriginalFilename());
-                FileOutputStream fos = new FileOutputStream(convFile);
-                fos.write(imageFile.getBytes());
-                fos.close();
+                if (restaurantRequestDTO.getImageFile()!=null) {
+                    Optional<MultipartFile> imageFile = restaurantRequestDTO.getImageFile();
+                    File convFile = new File(System.getProperty("java.io.tmpdir") + "/" +
+                            imageFile.get().getOriginalFilename());
+                    FileOutputStream fos = new FileOutputStream(convFile);
+                    fos.write(imageFile.get().getBytes());
+                    fos.close();
+                    var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
+                    restaurantRequestDTO.setImageUrl(pic.get("url").toString());
+                }
 
-                var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
-
-                restaurantRequestDTO.setImageUrl(pic.get("url").toString());
                 LocalDate lt = LocalDate.now();
                 restaurantRequestDTO.setLastUpdated(lt);
 
@@ -129,11 +130,13 @@ public class RestaurantService {
                     res.setLastUpdated(restaurantRequestDTO.getLastUpdated());
                     res.setCuisines(restaurantRequestDTO.getCuisines());
                     res.setMenuItems(restaurantRequestDTO.getMenuItems());
+                    res.setUser(userId);
+                    res.setAuth0Id(getAuth0Id(authentication));
                     Restaurant updatedRestaurant = restaurantRepository.save(res);
                     return RestaurantMapper.toDTO(updatedRestaurant);
                 });
             } catch (IOException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to upload the file.");
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Failed to update Restaurant.");
             }
         } else {
             return RestaurantMapper.toOptionalDTO(restaurant);

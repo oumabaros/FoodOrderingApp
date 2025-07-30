@@ -1,5 +1,4 @@
 package com.pm.restaurantservice.mapper;
-
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.model.Restaurant;
@@ -19,6 +18,8 @@ public class RestaurantMapper {
             restaurantDTO.setLastUpdated(res.getLastUpdated());
             restaurantDTO.setCuisines(res.getCuisines());
             restaurantDTO.setMenuItems(res.getMenuItems());
+            restaurantDTO.setUser(res.getUser());
+            restaurantDTO.setAuth0Id(res.getAuth0Id());
             return restaurantDTO;
         });
 
@@ -36,9 +37,10 @@ public class RestaurantMapper {
             restaurant.setLastUpdated(res.getLastUpdated());
             restaurant.setCuisines(res.getCuisines());
             restaurant.setMenuItems(res.getMenuItems());
+            restaurant.setAuth0Id(res.getAuth0Id());
+            restaurant.setUser(res.getUser());
             return restaurant;
         });
-
     }
 
     public static RestaurantResponseDTO toDTO(Restaurant restaurant) {
@@ -52,6 +54,8 @@ public class RestaurantMapper {
         restaurantDTO.setLastUpdated(restaurant.getLastUpdated());
         restaurantDTO.setCuisines(restaurant.getCuisines());
         restaurantDTO.setMenuItems(restaurant.getMenuItems());
+        restaurantDTO.setUser(restaurant.getUser());
+        restaurantDTO.setAuth0Id(restaurant.getAuth0Id());
         return restaurantDTO;
     }
 
@@ -66,6 +70,8 @@ public class RestaurantMapper {
         restaurant.setLastUpdated(restaurantRequestDTO.getLastUpdated());
         restaurant.setCuisines(restaurantRequestDTO.getCuisines());
         restaurant.setMenuItems(restaurantRequestDTO.getMenuItems());
+        restaurant.setAuth0Id(restaurantRequestDTO.getAuth0Id());
+        restaurant.setUser(restaurantRequestDTO.getUser());
         return restaurant;
     }
 }

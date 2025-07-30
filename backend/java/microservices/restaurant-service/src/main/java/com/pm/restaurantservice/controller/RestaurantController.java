@@ -59,7 +59,9 @@ public class RestaurantController {
             HttpServletRequest request,
             Authentication authentication) {
         try {
+            System.out.println("START CREATE ");
             RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequest(request);
+            System.out.println("DTO CREATED " +reqDTO);
             Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.createRestaurant(
                     reqDTO, authentication);
             if (restaurantResponseDTO.isPresent()) {
@@ -69,8 +71,6 @@ public class RestaurantController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -79,11 +79,10 @@ public class RestaurantController {
     public ResponseEntity<RestaurantResponseDTO> updateRestaurant(
             HttpServletRequest request,
             Authentication authentication) {
-
         try {
-            RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequest(request);
+            RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequestUpdate(request);
             System.out.println("DTO UPDATE: "+reqDTO);
-            Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.createRestaurant(
+            Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.updateRestaurant(
                     reqDTO, authentication);
             if (restaurantResponseDTO.isPresent()) {
                 RestaurantResponseDTO rest = restaurantResponseDTO.get();
@@ -92,9 +91,6 @@ public class RestaurantController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

@@ -14,9 +14,11 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class AuthUtils {
     private static final Logger log = LoggerFactory.getLogger(
             AuthUtils.class);
@@ -25,8 +27,8 @@ public class AuthUtils {
         this.userRepository=userRepository;
     }
 
-    public static String getUserId(){
-        User user = userRepository.findByAuth0Id(getAuth0Id()).orElseThrow(
+    public static String getUserId(String authId){
+        User user = userRepository.findByAuth0Id(authId).orElseThrow(
                 () -> new UserNotFoundException("User not found. "));
 
         return user.getId();

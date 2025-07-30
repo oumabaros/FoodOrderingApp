@@ -79,20 +79,20 @@ public class RestaurantService {
                 fos.close();
 
                 var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
-
-                //authServiceGrpcClient.getUserId();
-                //authServiceGrpcClient.getAuth0Id();
+                String userId=authServiceGrpcClient.getUserId(getAuth0Id(authentication)).getUserId();
+                System.out.println("USER ID: "+userId);
 
                 restaurantRequestDTO.setImageUrl(pic.get("url").toString());
                 LocalDate lt = LocalDate.now();
                 restaurantRequestDTO.setLastUpdated(lt);
                 System.out.println("IMAGE URL: "+restaurantRequestDTO.getImageUrl());
-                System.out.println("USER ID: "+ Utilities.getUserId(getAuth0Id(authentication)));
+                //System.out.println("USER ID: "+ Utilities.getUserId(getAuth0Id(authentication)));
 
                 Restaurant newRestaurant=restaurantRepository.save(RestaurantMapper.toModel(restaurantRequestDTO));
 
                 billingServiceGrpcClient.createBillingAccount(newRestaurant.getId(),
                         newRestaurant.getRestaurantName(), newRestaurant.getCountry());
+
                 return Optional.of(RestaurantMapper.toDTO(newRestaurant));
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to upload the file.");

@@ -4,14 +4,14 @@ option java_multiple_files = true;
 option java_package = "auth";
 
 service AuthService {
-  rpc GetUserDetails(AuthRequest) returns (AuthResponse);
+  rpc SendDetails(AuthRequest) returns (AuthResponse);
 }
 
 message AuthRequest {
+  string authId = 1;
 }
 
 message AuthResponse {
-  string authId = 1;
-  string email = 2;
-  string userId=3;
+  string userId = 1;
+
 }

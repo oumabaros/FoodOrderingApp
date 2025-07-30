@@ -104,7 +104,9 @@ public class RestaurantService {
                                                             Authentication authentication) {
         String userId=authServiceGrpcClient.getUserId(getAuth0Id(authentication)).getUserId();
         Optional<Restaurant> restaurant = restaurantRepository.findByUser(userId);
-        if (restaurant.isPresent()) {
+        //Restaurant restaurant = restaurantRepository.findByUser(userId).orElse(null);
+        if(restaurant.isPresent()){
+            Restaurant restaurant1=restaurant.get();
             try {
                 if (restaurantRequestDTO.getImageFile()!=null) {
                     Optional<MultipartFile> imageFile = restaurantRequestDTO.getImageFile();
@@ -116,30 +118,31 @@ public class RestaurantService {
                     var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
                     restaurantRequestDTO.setImageUrl(pic.get("url").toString());
                 }
-
+                else{
+                    restaurantRequestDTO.setImageUrl(restaurant1.getImageUrl());
+                }
                 LocalDate lt = LocalDate.now();
                 restaurantRequestDTO.setLastUpdated(lt);
-
-                return restaurant.map(res -> {
-                    res.setRestaurantName(restaurantRequestDTO.getRestaurantName());
-                    res.setCity(restaurantRequestDTO.getCity());
-                    res.setCountry(restaurantRequestDTO.getCountry());
-                    res.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
-                    res.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
-                    res.setImageUrl(restaurantRequestDTO.getImageUrl());
-                    res.setLastUpdated(restaurantRequestDTO.getLastUpdated());
-                    res.setCuisines(restaurantRequestDTO.getCuisines());
-                    res.setMenuItems(restaurantRequestDTO.getMenuItems());
-                    res.setUser(userId);
-                    res.setAuth0Id(getAuth0Id(authentication));
-                    Restaurant updatedRestaurant = restaurantRepository.save(res);
-                    return RestaurantMapper.toDTO(updatedRestaurant);
-                });
+                restaurant1.setRestaurantName(restaurantRequestDTO.getRestaurantName());
+                restaurant1.setCity(restaurantRequestDTO.getCity());
+                restaurant1.setCountry(restaurantRequestDTO.getCountry());
+                restaurant1.setDeliveryPrice(restaurantRequestDTO.getDeliveryPrice());
+                restaurant1.setEstimatedDeliveryTime(restaurantRequestDTO.getEstimatedDeliveryTime());
+                restaurant1.setImageUrl(restaurantRequestDTO.getImageUrl());
+                restaurant1.setLastUpdated(restaurantRequestDTO.getLastUpdated());
+                restaurant1.setCuisines(restaurantRequestDTO.getCuisines());
+                restaurant1.setMenuItems(restaurantRequestDTO.getMenuItems());
+                restaurant1.setUser(userId);
+                restaurant1.setAuth0Id(getAuth0Id(authentication));
+                Restaurant updatedRestaurant = restaurantRepository.save(restaurant1);
+                return Optional.of(RestaurantMapper.toDTO(updatedRestaurant));
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Failed to update Restaurant.");
             }
-        } else {
-            return RestaurantMapper.toOptionalDTO(restaurant);
         }
+        else{
+            return null;
+        }
+
     }
 }

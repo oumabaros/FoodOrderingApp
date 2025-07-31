@@ -6,7 +6,6 @@ import com.pm.restaurantservice.service.RestaurantService;
 import com.pm.restaurantservice.utils.RestaurantRequestParser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-
-
-
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/my/restaurant")
@@ -32,12 +29,8 @@ public class RestaurantController {
     @GetMapping
     @Operation(summary = "Get Restaurant")
     public ResponseEntity<RestaurantResponseDTO> getRestaurant(Authentication authentication) {
-        Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
-        if (restaurantResponseDTO.isPresent()) {
-            RestaurantResponseDTO rest = restaurantResponseDTO.get();
-            return new ResponseEntity<>(rest, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
+        return new ResponseEntity<>(restaurantResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/authid")
@@ -48,7 +41,7 @@ public class RestaurantController {
             Jwt jwt = jwtAuthenticationToken.getToken();
             return ResponseEntity.ok().body(jwt.getClaimAsString("sub"));
         } else {
-            throw new IllegalStateException("Oauth2 Security Context not found!");
+            throw new SecurityException("Oauth2 Security Context not found!");
         }
 
     }
@@ -59,19 +52,13 @@ public class RestaurantController {
             HttpServletRequest request,
             Authentication authentication) {
         try {
-            System.out.println("START CREATE ");
             RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequest(request);
-            System.out.println("DTO CREATED " +reqDTO);
-            Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.createRestaurant(
+            RestaurantResponseDTO restaurantResponseDTO = restaurantService.createRestaurant(
                     reqDTO, authentication);
-            if (restaurantResponseDTO.isPresent()) {
-                RestaurantResponseDTO rest = restaurantResponseDTO.get();
-                return new ResponseEntity<>(rest, HttpStatus.OK);
-            }
+            return ResponseEntity.ok().body(restaurantResponseDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(consumes = "multipart/form-data")
@@ -81,16 +68,11 @@ public class RestaurantController {
             Authentication authentication) {
         try {
             RestaurantRequestDTO reqDTO = RestaurantRequestParser.parseRestaurantRequestUpdate(request);
-            System.out.println("DTO UPDATE: "+reqDTO);
-            Optional<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.updateRestaurant(
+            RestaurantResponseDTO restaurantResponseDTO = restaurantService.updateRestaurant(
                     reqDTO, authentication);
-            if (restaurantResponseDTO.isPresent()) {
-                RestaurantResponseDTO rest = restaurantResponseDTO.get();
-                return new ResponseEntity<>(rest, HttpStatus.OK);
-            }
+            return ResponseEntity.ok().body(restaurantResponseDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

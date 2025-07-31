@@ -4,6 +4,8 @@ import com.pm.restaurantservice.model.MenuItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
+
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +28,7 @@ public class RestaurantRequestDTO {
     private Integer estimatedDeliveryTime;
     private LocalDate lastUpdated;
     private String imageUrl;
-    Optional<MultipartFile> imageFile;
+    MultipartFile imageFile;
     @NotBlank
     private List<String> cuisines;
     @NotBlank
@@ -42,7 +44,7 @@ public class RestaurantRequestDTO {
                                 Integer estimatedDeliveryTime,
                                 List<MenuItem> menuItems,
                                 List<String> cuisines,
-                                Optional<MultipartFile> imageFile){
+                                MultipartFile imageFile){
         this.restaurantName=restaurantName;
         this.city=city;
         this.country=country;
@@ -68,11 +70,11 @@ public class RestaurantRequestDTO {
         this.imageUrl = imageUrl;
     }
 
-    public Optional<MultipartFile> getImageFile() {
+    public MultipartFile getImageFile() {
         return imageFile;
     }
 
-    public void setImageFile(Optional<MultipartFile> imageFile) {
+    public void setImageFile(MultipartFile imageFile) {
         this.imageFile = imageFile;
     }
 

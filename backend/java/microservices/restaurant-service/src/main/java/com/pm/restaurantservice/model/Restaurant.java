@@ -22,7 +22,6 @@ public class Restaurant {
   private Double deliveryPrice;
   @NotNull
   private Integer estimatedDeliveryTime;
-  @NotNull
   private String imageUrl;
   @NotNull
   private LocalDate lastUpdated;

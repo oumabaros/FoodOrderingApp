@@ -2,6 +2,7 @@ package com.pm.restaurantservice.controller;
 
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
+import com.pm.restaurantservice.exception.RestaurantNotFoundException;
 import com.pm.restaurantservice.service.RestaurantService;
 import com.pm.restaurantservice.utils.RestaurantRequestParser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,14 +24,20 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     public RestaurantController(RestaurantService restaurantService) {
+
         this.restaurantService = restaurantService;
     }
 
     @GetMapping
     @Operation(summary = "Get Restaurant")
     public ResponseEntity<RestaurantResponseDTO> getRestaurant(Authentication authentication) {
-        RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
-        return new ResponseEntity<>(restaurantResponseDTO, HttpStatus.OK);
+        try{
+            RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
+            return new ResponseEntity<>(restaurantResponseDTO, HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw new RestaurantNotFoundException("Restaurant not found.");
+        }
     }
 
     @GetMapping("/authid")

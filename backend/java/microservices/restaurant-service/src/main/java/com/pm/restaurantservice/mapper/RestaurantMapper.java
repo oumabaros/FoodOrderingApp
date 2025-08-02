@@ -20,6 +20,7 @@ public class RestaurantMapper {
             restaurantDTO.setMenuItems(res.getMenuItems());
             restaurantDTO.setUser(res.getUser());
             restaurantDTO.setAuth0Id(res.getAuth0Id());
+            restaurantDTO.set_id(res.getId());
             return restaurantDTO;
         });
 
@@ -56,6 +57,7 @@ public class RestaurantMapper {
         restaurantDTO.setMenuItems(restaurant.getMenuItems());
         restaurantDTO.setUser(restaurant.getUser());
         restaurantDTO.setAuth0Id(restaurant.getAuth0Id());
+        restaurantDTO.set_id(restaurant.getId());
         return restaurantDTO;
     }
 

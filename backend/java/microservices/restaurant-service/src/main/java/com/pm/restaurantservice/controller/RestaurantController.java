@@ -31,13 +31,14 @@ public class RestaurantController {
     @GetMapping
     @Operation(summary = "Get Restaurant")
     public ResponseEntity<RestaurantResponseDTO> getRestaurant(Authentication authentication) {
-        try{
-            RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
+        RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurantByUser(authentication);
+        if(restaurantResponseDTO!=null){
             return new ResponseEntity<>(restaurantResponseDTO, HttpStatus.OK);
         }
-        catch (Exception e){
-            throw new RestaurantNotFoundException("Restaurant not found.");
+        else{
+            return new ResponseEntity<>(new RestaurantResponseDTO(),HttpStatus.NOT_FOUND);
         }
+
     }
 
     @GetMapping("/authid")

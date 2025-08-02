@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class RestaurantResponseDTO {
+
     public void setUser(String user) {
         this.user = user;
     }
@@ -86,13 +87,22 @@ public class RestaurantResponseDTO {
         this.menuItems = menuItems;
     }
 
-    public String getAuth0Id() {
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+        public String getAuth0Id() {
         return auth0Id;
     }
 
     public void setAuth0Id(String auth0Id) {
         this.auth0Id = auth0Id;
     }
+    public String _id;
     private String restaurantName;
 
     private String city;

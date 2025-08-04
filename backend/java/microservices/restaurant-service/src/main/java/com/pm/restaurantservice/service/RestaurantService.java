@@ -73,8 +73,8 @@ public class RestaurantService {
             return RestaurantMapper.toDTO(restaurant.get());
         } else {
             try {
-                if (!restaurantRequestDTO.getImageFile().isEmpty()) {
-                    MultipartFile imageFile = restaurantRequestDTO.getImageFile();
+                if (restaurantRequestDTO.getImageFile()!=null) {
+                   MultipartFile imageFile = restaurantRequestDTO.getImageFile();
                     File convFile = new File(System.getProperty("java.io.tmpdir") + "/" +
                             imageFile.getOriginalFilename());
                     FileOutputStream fos = new FileOutputStream(convFile);
@@ -106,7 +106,8 @@ public class RestaurantService {
                 () -> new RestaurantNotFoundException("Restaurant not found."));
 
         try {
-            if (!restaurantRequestDTO.getImageFile().isEmpty()) {
+            if (restaurantRequestDTO.getImageFile()!=null) {
+                System.out.println("EDITING IMAGE FILE NOT EMPTY. CREATE NEW URL");
                 MultipartFile imageFile = restaurantRequestDTO.getImageFile();
                 File convFile = new File(System.getProperty("java.io.tmpdir") + "/" +
                         imageFile.getOriginalFilename());
@@ -116,6 +117,7 @@ public class RestaurantService {
                 var pic = cloudinary.uploader().upload(convFile, ObjectUtils.asMap("folder", "/mern-food-ordering-app/"));
                 restaurantRequestDTO.setImageUrl(pic.get("url").toString());
             } else {
+                System.out.println("EDITING IMAGE FILE EMPTY...REVERTING TO ORIGINAL URL: {}"+restaurant.getImageUrl());
                 restaurantRequestDTO.setImageUrl(restaurant.getImageUrl());
             }
             LocalDate lt = LocalDate.now();

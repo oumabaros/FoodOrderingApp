@@ -2,7 +2,6 @@ package com.pm.restaurantservice.controller;
 
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
-import com.pm.restaurantservice.exception.RestaurantNotFoundException;
 import com.pm.restaurantservice.service.RestaurantService;
 import com.pm.restaurantservice.utils.RestaurantRequestParser;
 import io.swagger.v3.oas.annotations.Operation;

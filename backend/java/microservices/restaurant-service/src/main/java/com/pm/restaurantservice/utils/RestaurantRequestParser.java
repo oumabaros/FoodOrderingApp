@@ -56,7 +56,6 @@ public class RestaurantRequestParser {
         List<MenuItem> menuItems = new ArrayList<>();
         List<String> cuisines = new ArrayList<>();
         MultipartFile imageFile = multipartRequest.getFile("imageFile");
-
         String restaurantName = multipartRequest.getParameter("restaurantName");
         String city = multipartRequest.getParameter("city");
         String country = multipartRequest.getParameter("country");

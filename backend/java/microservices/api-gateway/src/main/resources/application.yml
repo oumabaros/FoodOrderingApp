@@ -76,10 +76,18 @@ spring:
             - RewritePath=/api/(?<segment>.*), /${segment}
 
         # Route for /api/restaurants/** to restaurant-service
-        - id: restaurant-service-route
+        - id: restaurant-my-service-route
           uri: http://host.docker.internal:4000
           predicates:
             - Path=/api/my/restaurant/**
+          filters:
+            - AddResponseHeader=X-CORS-Enabled, true
+            - RewritePath=/api/(?<segment>.*), /${segment}
+        # Route for /api/restaurants/** to restaurant-service
+        - id: restaurant-service-route
+          uri: http://host.docker.internal:4000
+          predicates:
+            - Path=/api/restaurant/**
           filters:
             - AddResponseHeader=X-CORS-Enabled, true
             - RewritePath=/api/(?<segment>.*), /${segment}

@@ -169,8 +169,14 @@ public class RestaurantService {
         }
 
         List<RestaurantResponseDTO> restaurantsDTO=new ArrayList<>();
-
-        List<Restaurant> restaurants = mongoTemplate.find(query,Restaurant.class);
+         Integer pageSize = 10;
+         Integer skip = (Integer.parseInt(page)- 1) * pageSize;
+        List<Restaurant> restaurants = mongoTemplate.find(query,Restaurant.class)
+                .stream()
+                .sorted()
+                .skip(skip)
+                .limit(pageSize)
+                .toList();
 
         for (Restaurant restaurant: restaurants) {
             restaurantsDTO.add(RestaurantMapper.toDTO(restaurant));

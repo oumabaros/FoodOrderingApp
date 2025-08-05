@@ -140,4 +140,11 @@ public class RestaurantService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Failed to update Restaurant.");
         }
     }
+
+    public RestaurantResponseDTO searchRestaurantIncity(String city){
+
+        Restaurant restaurant = restaurantRepository.findByAuth0Id(city).orElseThrow(
+                () -> new RestaurantNotFoundException("Restaurant not found."));
+        return RestaurantMapper.toDTO(restaurant);
+    }
 }

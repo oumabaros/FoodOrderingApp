@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 import myUserRoute from './routes/myUserRoute';
 import myRestaurantRoute from './routes/MyRestaurantRoute';
 import {v2 as cloudinary} from 'cloudinary';
-import Restaurant from './models/restaurant';
 import RestaurantRoute from './routes/RestaurantRoute';
 
 mongoose

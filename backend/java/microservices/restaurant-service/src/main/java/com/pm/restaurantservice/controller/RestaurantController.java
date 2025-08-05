@@ -5,10 +5,9 @@ import com.pm.restaurantservice.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -21,12 +20,21 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @GetMapping("/search{/city}")
+    @GetMapping("/search/{city}")
     @Operation(summary = "Search restaurants within a given city")
-    public ResponseEntity<RestaurantResponseDTO> searchRestaurantInCity(@PathVariable String city) {
-
-        RestaurantResponseDTO restaurantResponseDTO = restaurantService.searchRestaurantIncity(city);
-
+    public ResponseEntity<List<RestaurantResponseDTO>> searchRestaurant(
+            @PathVariable String city,
+            @RequestParam(name = "searchQuery", required = false,defaultValue = "") String searchQuery,
+            @RequestParam(name = "selectedCuisines", required = false,defaultValue = "") String selectedCuisines,
+            @RequestParam(name = "sortOption", required = false,defaultValue = "lastUpdated") String sortOption,
+            @RequestParam(name = "page", required = false,defaultValue = "1") String page) {
+        List<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.searchRestaurant(
+                city,
+                searchQuery,
+                selectedCuisines,
+                sortOption,
+                page
+        );
         return ResponseEntity.ok().body(restaurantResponseDTO);
     }
 }

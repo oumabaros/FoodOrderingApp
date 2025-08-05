@@ -15,8 +15,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -34,17 +40,19 @@ public class RestaurantService {
     private final AuthServiceGrpcClient authServiceGrpcClient;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
     private final Cloudinary cloudinary;
+    private final MongoTemplate mongoTemplate;
 
 
     public RestaurantService(RestaurantRepository restaurantRepository,
                              AuthServiceGrpcClient authServiceGrpcClient,
                              BillingServiceGrpcClient billingServiceGrpcClient,
-                             Cloudinary cloudinary) {
+                             Cloudinary cloudinary,
+                             MongoTemplate mongoTemplate) {
         this.restaurantRepository = restaurantRepository;
         this.cloudinary = cloudinary;
         this.authServiceGrpcClient = authServiceGrpcClient;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
-
+        this.mongoTemplate=mongoTemplate;
     }
 
     public RestaurantResponseDTO getRestaurantByUser(Authentication authentication) {
@@ -141,10 +149,32 @@ public class RestaurantService {
         }
     }
 
-    public RestaurantResponseDTO searchRestaurantIncity(String city){
+    public List<RestaurantResponseDTO> searchRestaurant(String city,
+                                                        String searchQuery,
+                                                        String selectedCuisines,
+                                                        String sortOption,
+                                                        String page){
+        Query query = new Query();
+        if (city != null && !city.isEmpty()) {
+            query.addCriteria(Criteria.where("city").regex(city, "i"));
+        }
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            query.addCriteria(Criteria.where("searchQuery").regex(city, "i"));
+        }
+        if (selectedCuisines != null && !selectedCuisines.isEmpty()) {
+            Arrays.stream(selectedCuisines.split(",")).map(c->{
+                return query.addCriteria(Criteria.where("cuisines").regex(c, "i"));
+            });
 
-        Restaurant restaurant = restaurantRepository.findByAuth0Id(city).orElseThrow(
-                () -> new RestaurantNotFoundException("Restaurant not found."));
-        return RestaurantMapper.toDTO(restaurant);
+        }
+
+        List<RestaurantResponseDTO> restaurantsDTO=new ArrayList<>();
+
+        List<Restaurant> restaurants = mongoTemplate.find(query,Restaurant.class);
+
+        for (Restaurant restaurant: restaurants) {
+            restaurantsDTO.add(RestaurantMapper.toDTO(restaurant));
+        }
+        return restaurantsDTO;
     }
 }

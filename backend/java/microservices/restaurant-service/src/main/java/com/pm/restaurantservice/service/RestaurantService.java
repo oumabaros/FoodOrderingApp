@@ -2,8 +2,10 @@ package com.pm.restaurantservice.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.pm.restaurantservice.dto.Pagination;
 import com.pm.restaurantservice.dto.RestaurantRequestDTO;
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
+import com.pm.restaurantservice.dto.SearchRestaurantResponseDTO;
 import com.pm.restaurantservice.exception.RestaurantNotFoundException;
 import com.pm.restaurantservice.grpc.AuthServiceGrpcClient;
 import com.pm.restaurantservice.grpc.BillingServiceGrpcClient;
@@ -20,6 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -149,38 +154,33 @@ public class RestaurantService {
         }
     }
 
-    public List<RestaurantResponseDTO> searchRestaurant(String city,
+    public SearchRestaurantResponseDTO searchRestaurant(String city,
                                                         String searchQuery,
                                                         String selectedCuisines,
                                                         String sortOption,
                                                         String page){
+
         Query query = new Query();
+        List<RestaurantResponseDTO> restaurantsDTO=new ArrayList<>();
+        Integer pageSize = 10;
+
         if (city != null && !city.isEmpty()) {
             query.addCriteria(Criteria.where("city").regex(city, "i"));
         }
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-            query.addCriteria(Criteria.where("searchQuery").regex(city, "i"));
-        }
+
         if (selectedCuisines != null && !selectedCuisines.isEmpty()) {
-            Arrays.stream(selectedCuisines.split(",")).map(c->{
-                return query.addCriteria(Criteria.where("cuisines").regex(c, "i"));
-            });
-
+            List<String> list = Arrays.asList(selectedCuisines.split(",", -1));
+            query.addCriteria(Criteria.where("cuisines").in(list));
         }
-
-        List<RestaurantResponseDTO> restaurantsDTO=new ArrayList<>();
-         Integer pageSize = 10;
-         Integer skip = (Integer.parseInt(page)- 1) * pageSize;
-        List<Restaurant> restaurants = mongoTemplate.find(query,Restaurant.class)
-                .stream()
-                .sorted()
-                .skip(skip)
-                .limit(pageSize)
-                .toList();
+        Pageable pageable = PageRequest.of(Integer.parseInt(page)-1, pageSize, Sort.by(sortOption).descending());
+        List<Restaurant> restaurants = mongoTemplate.find(query.with(pageable),Restaurant.class);
+        Long total=mongoTemplate.count(query, Restaurant.class);
+        Long pages=Math.ceilDiv(total,pageSize);
 
         for (Restaurant restaurant: restaurants) {
             restaurantsDTO.add(RestaurantMapper.toDTO(restaurant));
         }
-        return restaurantsDTO;
+        Pagination pgn=new Pagination(total,Integer.parseInt(page),pages);
+        return new SearchRestaurantResponseDTO(restaurantsDTO,pgn);
     }
 }

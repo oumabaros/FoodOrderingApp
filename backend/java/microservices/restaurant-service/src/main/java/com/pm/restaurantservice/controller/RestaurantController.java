@@ -1,6 +1,7 @@
 package com.pm.restaurantservice.controller;
 
 import com.pm.restaurantservice.dto.RestaurantResponseDTO;
+import com.pm.restaurantservice.dto.SearchRestaurantResponseDTO;
 import com.pm.restaurantservice.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,13 +23,14 @@ public class RestaurantController {
 
     @GetMapping("/search/{city}")
     @Operation(summary = "Search restaurants within a given city")
-    public ResponseEntity<List<RestaurantResponseDTO>> searchRestaurant(
+    public ResponseEntity<SearchRestaurantResponseDTO> searchRestaurant(
             @PathVariable String city,
             @RequestParam(name = "searchQuery", required = false,defaultValue = "") String searchQuery,
             @RequestParam(name = "selectedCuisines", required = false,defaultValue = "") String selectedCuisines,
             @RequestParam(name = "sortOption", required = false,defaultValue = "lastUpdated") String sortOption,
             @RequestParam(name = "page", required = false,defaultValue = "1") String page) {
-        List<RestaurantResponseDTO> restaurantResponseDTO = restaurantService.searchRestaurant(
+
+        SearchRestaurantResponseDTO restaurantResponseDTO = restaurantService.searchRestaurant(
                 city,
                 searchQuery,
                 selectedCuisines,

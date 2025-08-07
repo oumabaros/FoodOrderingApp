@@ -1,8 +1,9 @@
 import { cuisineList } from "@/config/restaurant-options-config";
 import { Label } from "./ui/label";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
-import { ChangeEvent } from "react";
+
 import { Button } from "./ui/button";
+import type { ChangeEvent } from "react";
 
 type Props = {
   onChange: (cuisines: string[]) => void;
@@ -45,10 +46,10 @@ const CuisineFilter = ({
       <div className="space-y-2 flex flex-col">
         {cuisineList
           .slice(0, isExpanded ? cuisineList.length : 7)
-          .map((cuisine) => {
+          .map((cuisine, index) => {
             const isSelected = selectedCuisines.includes(cuisine);
             return (
-              <div className="flex">
+              <div className="flex" key={index}>
                 <input
                   id={`cuisine_${cuisine}`}
                   type="checkbox"

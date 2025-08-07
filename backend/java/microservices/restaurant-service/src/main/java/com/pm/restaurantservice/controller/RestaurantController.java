@@ -1,6 +1,5 @@
 package com.pm.restaurantservice.controller;
 
-import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.dto.SearchRestaurantResponseDTO;
 import com.pm.restaurantservice.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant")

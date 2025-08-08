@@ -154,6 +154,15 @@ public class RestaurantService {
         }
     }
 
+    public RestaurantResponseDTO getRestaurant(String restaurantId){
+        Query query = new Query();
+        if (restaurantId != null && !restaurantId.isEmpty()) {
+            query.addCriteria(Criteria.where("_id").is(restaurantId));
+        }
+
+        Restaurant restaurant=mongoTemplate.findOne(query, Restaurant.class);
+        return RestaurantMapper.toDTO(restaurant);
+    }
     public SearchRestaurantResponseDTO searchRestaurant(String city,
                                                         String searchQuery,
                                                         String selectedCuisines,

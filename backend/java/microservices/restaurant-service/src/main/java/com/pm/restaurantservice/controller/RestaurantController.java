@@ -1,5 +1,6 @@
 package com.pm.restaurantservice.controller;
 
+import com.pm.restaurantservice.dto.RestaurantResponseDTO;
 import com.pm.restaurantservice.dto.SearchRestaurantResponseDTO;
 import com.pm.restaurantservice.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +36,14 @@ public class RestaurantController {
                 sortOption,
                 page
         );
+        return ResponseEntity.ok().body(restaurantResponseDTO);
+    }
+
+    @GetMapping("/{restaurantId}")
+    @Operation(summary = "Search restaurants within a given city")
+    public ResponseEntity<RestaurantResponseDTO> getRestaurant(@PathVariable String restaurantId) {
+
+        RestaurantResponseDTO restaurantResponseDTO = restaurantService.getRestaurant(restaurantId);
         return ResponseEntity.ok().body(restaurantResponseDTO);
     }
 }

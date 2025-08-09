@@ -171,10 +171,16 @@ public class RestaurantService {
 
         Query query = new Query();
         List<RestaurantResponseDTO> restaurantsDTO=new ArrayList<>();
-        Integer pageSize = 10;
+        int pageSize = 10;
 
         if (city != null && !city.isEmpty()) {
             query.addCriteria(Criteria.where("city").regex(city, "i"));
+        }
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("restaurantName").regex(searchQuery, "i"),
+                    Criteria.where("cuisines").regex(searchQuery, "i")
+            ));
         }
 
         if (selectedCuisines != null && !selectedCuisines.isEmpty()) {
@@ -183,7 +189,7 @@ public class RestaurantService {
         }
         Pageable pageable = PageRequest.of(Integer.parseInt(page)-1, pageSize, Sort.by(sortOption).descending());
         List<Restaurant> restaurants = mongoTemplate.find(query.with(pageable),Restaurant.class);
-        Long total=mongoTemplate.count(query, Restaurant.class);
+        long total=mongoTemplate.count(query, Restaurant.class);
         Long pages=Math.ceilDiv(total,pageSize);
 
         for (Restaurant restaurant: restaurants) {

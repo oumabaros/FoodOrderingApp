@@ -187,9 +187,11 @@ public class RestaurantService {
             List<String> list = Arrays.asList(selectedCuisines.split(",", -1));
             query.addCriteria(Criteria.where("cuisines").in(list));
         }
+        long total=mongoTemplate.count(query, Restaurant.class);
         Pageable pageable = PageRequest.of(Integer.parseInt(page)-1, pageSize, Sort.by(sortOption).descending());
         List<Restaurant> restaurants = mongoTemplate.find(query.with(pageable),Restaurant.class);
-        long total=mongoTemplate.count(query, Restaurant.class);
+        //List<Restaurant> restaurants = mongoTemplate.find(query,Restaurant.class);
+
         Long pages=Math.ceilDiv(total,pageSize);
 
         for (Restaurant restaurant: restaurants) {
